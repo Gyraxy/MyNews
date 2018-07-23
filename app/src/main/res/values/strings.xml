@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MyNews</string>
+
+    <!-- MENU STRINGS -->
+    <string name="notifications">Notifications</string>
+    <string name="help">Help</string>
+    <string name="about">About</string>
+    <string name="search">Search</string>
+
+</resources>
