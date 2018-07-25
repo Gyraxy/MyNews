@@ -11,9 +11,9 @@ import com.duboscq.nicolas.mynews.controllers.fragments.TopStoriesFragment;
 /**
  * Created by Nicolas DUBOSCQ on 24/07/2018
  */
-public class PageAdapter extends FragmentPagerAdapter {
+public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    public PageAdapter(FragmentManager mgr) {
+    public ViewPagerAdapter(FragmentManager mgr) {
         super(mgr);
     }
 

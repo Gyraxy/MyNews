@@ -26,6 +26,16 @@
                 android:value="com.duboscq.nicolas.mynews.controllers.activities.MainActivity" />
 
         </activity>
+        <activity
+            android:name=".controllers.activities.NotificationsActivity"
+            android:label="Search"
+            android:parentActivityName="com.duboscq.nicolas.mynews.controllers.activities.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.duboscq.nicolas.mynews.controllers.activities.MainActivity" />
+
+        </activity>
     </application>
 
 </manifest>

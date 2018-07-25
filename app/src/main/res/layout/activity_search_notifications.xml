@@ -165,4 +165,21 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/activity_notification_switch_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+        
+        <Switch
+            android:id="@+id/activity_notification_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enable Notifications (once per day)"
+            android:paddingStart="5dp"
+            android:textSize="12sp"/>
+
+    </LinearLayout>
+
 </LinearLayout>

@@ -7,4 +7,15 @@
     <string name="about">About</string>
     <string name="search">Search</string>
 
+    <!-- SEARCH ACTIVITY STRINGS -->
+    <string name="search_query">Search query term</string>
+    <string name="begin_date">Begin Date</string>
+    <string name="end_date">End Date</string>
+    <string name="arts">Arts</string>
+    <string name="business">Business</string>
+    <string name="entrepreneurs">Entrepreneurs</string>
+    <string name="politics">Politics</string>
+    <string name="sports">Sports</string>
+    <string name="travel">Travel</string>
+
 </resources>
