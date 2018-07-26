@@ -18,4 +18,14 @@
     <string name="sports">Sports</string>
     <string name="travel">Travel</string>
 
+    <!-- NAVIGATION DRAWER -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="drawer_arts">ARTS</string>
+    <string name="drawer_business">BUSINESS</string>
+    <string name="drawer_entrepreneurs">ENTREPRENEURS</string>
+    <string name="drawer_politics">POLITICS</string>
+    <string name="drawer_sports">SPORTS</string>
+    <string name="drawer_travel">TRAVEL</string>
+
 </resources>

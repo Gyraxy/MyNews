@@ -38,6 +38,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
+
         switch (position){
             case 0: //Page number 1
                 return "TOP STORIES";

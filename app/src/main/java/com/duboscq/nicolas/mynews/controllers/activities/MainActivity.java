@@ -1,8 +1,13 @@
 package com.duboscq.nicolas.mynews.controllers.activities;
 
 import android.content.Intent;
+import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,13 +16,15 @@ import android.view.MenuItem;
 import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.adapters.ViewPagerAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     //FOR DESIGN
     private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     //FOR DATA
-
+    private String CUSTOM_KEY="CUSTOM_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.configureMainToolbar();
         this.configureViewPagerAndTabs();
+        this.configureDrawerLayout();
+        this.configureNavigationView();
     }
 
 
@@ -72,4 +81,47 @@ public class MainActivity extends AppCompatActivity {
         tabs.setupWithViewPager(pager);
         tabs.setTabMode(TabLayout.MODE_FIXED);
     }
+
+    //NAVIGATION DRAWER
+
+    @Override
+    public void onBackPressed() {
+        // Handle back click to close menu
+        if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            this.drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    // Configure Drawer Layout
+    private void configureDrawerLayout() {
+        this.drawerLayout = findViewById(R.id.activity_main_drawer);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    // Configure NavigationView
+    private void configureNavigationView(){
+        this.navigationView = findViewById(R.id.activity_main_nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    // Configure Navigation Drawer OnClick
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.activity_main_drawer_arts:
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putString(CUSTOM_KEY, "ARTS").apply();
+                break;
+            default:
+                break;
+        }
+        //this.drawerLayout.closeDrawer(GravityCompat.START);
+
+        return true;
+    }
+
 }

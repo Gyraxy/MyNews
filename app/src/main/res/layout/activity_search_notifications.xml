@@ -24,7 +24,8 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:hint="@string/search_query"
-        android:backgroundTint="@color/colorPrimary"/>
+        android:backgroundTint="@color/colorPrimary"
+        tools:targetApi="lollipop" />
 
     </LinearLayout>
 
