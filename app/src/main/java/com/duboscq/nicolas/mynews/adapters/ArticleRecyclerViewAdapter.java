@@ -6,12 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.views.ArticleViewHolder;
-
 import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * Created by Nicolas DUBOSCQ on 24/07/2018
@@ -22,7 +20,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleView
     private Context mContext;
 
     public ArticleRecyclerViewAdapter(Context mContext) {
-        list = new ArrayList<String>();
+        list = new ArrayList<>();
         list.add("Article 1");
         list.add("Article 2");
         list.add("Article 3");
@@ -35,7 +33,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleView
     @Override
     public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.article_view, parent, false);
+        View view = inflater.inflate(R.layout.article_view_summary, parent, false);
         ArticleViewHolder vHolder = new ArticleViewHolder(view);
         return vHolder;
     }

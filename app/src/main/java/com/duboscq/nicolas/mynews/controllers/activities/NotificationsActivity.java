@@ -5,25 +5,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.duboscq.nicolas.mynews.R;
+import butterknife.ButterKnife;
 
 /**
  * Created by Nicolas DUBOSCQ on 25/07/2018
  */
 public class NotificationsActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_notifications);
         setTitle("Notifications");
-        LinearLayout linearLayout = findViewById(R.id.activity_search_date_layout);
-        Button search_button = findViewById(R.id.activity_search_search_button);
-        search_button.setVisibility(View.GONE);
-        linearLayout.setVisibility(View.GONE);
+        ButterKnife.bind(this);
+        LinearLayout search_date_layout = findViewById(R.id.activity_search_date_layout);
+        LinearLayout search_button_layout = findViewById(R.id.activity_search_button_layout);
+        search_date_layout.setVisibility(View.GONE);
+        search_button_layout.setVisibility(View.GONE);
         configureSearchToolbar();
     }
 

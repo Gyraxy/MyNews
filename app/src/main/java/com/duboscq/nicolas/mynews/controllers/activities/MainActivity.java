@@ -1,7 +1,6 @@
 package com.duboscq.nicolas.mynews.controllers.activities;
 
 import android.content.Intent;
-import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -16,20 +15,23 @@ import android.view.MenuItem;
 import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.adapters.ViewPagerAdapter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     //FOR DESIGN
+    @BindView(R.id.activity_main_tabs) TabLayout tabs;
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
-    //FOR DATA
-    private String CUSTOM_KEY="CUSTOM_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         this.configureMainToolbar();
         this.configureViewPagerAndTabs();
         this.configureDrawerLayout();
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ViewPager pager = findViewById(R.id.activity_main_viewpager);
         pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
-        TabLayout tabs= findViewById(R.id.activity_main_tabs);
+        tabs= findViewById(R.id.activity_main_tabs);
         tabs.setupWithViewPager(pager);
         tabs.setTabMode(TabLayout.MODE_FIXED);
     }
@@ -111,16 +113,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Configure Navigation Drawer OnClick
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
+        tabs.getTabAt(2).select();
         switch (item.getItemId()){
             case R.id.activity_main_drawer_arts:
-                PreferenceManager.getDefaultSharedPreferences(this).edit().putString(CUSTOM_KEY, "ARTS").apply();
+                tabs.getTabAt(2).setText("ARTS");
+                break;
+            case R.id.activity_main_drawer_business:
+                tabs.getTabAt(2).setText("BUSINESS");
+                break;
+            case R.id.activity_main_drawer_entrepreneurs:
+                tabs.getTabAt(2).setText("ENTREPRENEURS");
+                break;
+            case R.id.activity_main_drawer_politics:
+                tabs.getTabAt(2).setText("POLITICS");
+                break;
+            case R.id.activity_main_drawer_sports:
+                tabs.getTabAt(2).setText("SPORTS");
+                break;
+            case R.id.activity_main_drawer_travel:
+                tabs.getTabAt(2).setText("TRAVEL");
                 break;
             default:
                 break;
         }
-        //this.drawerLayout.closeDrawer(GravityCompat.START);
-
+        this.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 

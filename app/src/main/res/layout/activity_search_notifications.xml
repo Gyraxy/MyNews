@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".controllers.activities.SearchActivity"
     android:orientation="vertical">
 
@@ -53,7 +53,7 @@
                 android:id="@+id/activity_search_begin_date_edt"
                 android:layout_width="170dp"
                 android:layout_height="42dp"
-                android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
+                android:drawableRight="@drawable/ic_arrow_drop_down_black_24"
                 android:inputType="date"/>
 
         </LinearLayout>
@@ -74,7 +74,7 @@
                 android:id="@+id/activity_search_end_date_edt"
                 android:layout_width="170dp"
                 android:layout_height="42dp"
-                android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
+                android:drawableRight="@drawable/ic_arrow_drop_down_black_24"
                 android:inputType="date"/>
 
         </LinearLayout>
@@ -95,25 +95,31 @@
             android:orientation="vertical">
 
             <CheckBox
+                android:theme="@style/checkBoxStyle"
                 android:id="@+id/activity_search_chb_arts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:text="@string/arts"/>
+                android:text="@string/arts"
+                android:textColor="@color/colorBlack"/>
 
             <CheckBox
+                android:theme="@style/checkBoxStyle"
                 android:id="@+id/activity_search_chb_business"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:text="@string/business"/>
+                android:text="@string/business"
+                android:textColor="@color/colorBlack"/>
 
             <CheckBox
+                android:theme="@style/checkBoxStyle"
                 android:id="@+id/activity_search_chb_entrepreneurs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:text="@string/entrepreneurs"/>
+                android:text="@string/entrepreneurs"
+                android:textColor="@color/colorBlack"/>
 
         </LinearLayout>
 
@@ -124,25 +130,31 @@
             android:orientation="vertical">
 
             <CheckBox
+                android:theme="@style/checkBoxStyle"
                 android:id="@+id/activity_search_chb_politics"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:text="@string/politics"/>
+                android:text="@string/politics"
+                android:textColor="@color/colorBlack"/>
 
             <CheckBox
+                android:theme="@style/checkBoxStyle"
                 android:id="@+id/activity_search_chb_sports"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:text="@string/sports"/>
+                android:text="@string/sports"
+                android:textColor="@color/colorBlack"/>
 
             <CheckBox
+                android:theme="@style/checkBoxStyle"
                 android:id="@+id/activity_search_chb_travel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/travel"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:textColor="@color/colorBlack"/>
 
         </LinearLayout>
 
@@ -153,7 +165,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:id="@+id/activity_search_button_layout">
 
         <Button
             android:id="@+id/activity_search_search_button"
@@ -167,12 +180,25 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGrey"/>
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/activity_notification_switch_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
-        
+
         <Switch
             android:id="@+id/activity_notification_switch"
             android:layout_width="match_parent"
