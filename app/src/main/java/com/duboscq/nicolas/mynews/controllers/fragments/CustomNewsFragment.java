@@ -32,10 +32,6 @@ public class CustomNewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_articles, container, false);
         ButterKnife.bind(this, view);
-        RecyclerView recyclerView = view.findViewById(R.id.article_recycler_view);
-        ArticleRecyclerViewAdapter adapter = new ArticleRecyclerViewAdapter(getContext());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //configureSwipeRefreshLayout();
         return view;
     }

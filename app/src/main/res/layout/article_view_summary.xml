@@ -2,47 +2,85 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/recycler_view_layout"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dip">
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/recycler_view_imv_article_image"
-            android:contentDescription="null"
-            android:layout_width="56dip"
-            android:layout_height="56dip"/>
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="6.5dp"
+            android:paddingBottom="6.5dp"
+            android:paddingStart="16dp">
+
+            <ImageView
+                android:id="@+id/recycler_view_imv_article_image"
+                android:contentDescription="null"
+                android:layout_width="75dp"
+                android:layout_height="75dp">
+
+            </ImageView>
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/recycler_view_txt_article_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:textStyle="bold"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/recycler_view_txt_article_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/recycler_view_txt_article_summary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textStyle="normal"
+                android:textSize="14sp"
+                android:text="Article Summary"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dip">
+        android:paddingStart="104dp">
 
-        <TextView
-            android:id="@+id/recycler_view_txt_article_title"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/recycler_view_txt_article_summary"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textStyle="normal"
-            android:textSize="14sp"
-            android:text="Article Summary"/>
+            android:layout_height="1dp"
+            android:background="@color/colorGrey"/>
 
     </LinearLayout>
 
