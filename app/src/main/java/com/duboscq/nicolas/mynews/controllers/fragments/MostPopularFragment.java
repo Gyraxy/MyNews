@@ -15,6 +15,7 @@ import com.duboscq.nicolas.mynews.adapters.ArticleRecyclerViewAdapter;
 import com.duboscq.nicolas.mynews.models.Articles;
 import com.duboscq.nicolas.mynews.models.GeneralInfo;
 import com.duboscq.nicolas.mynews.utils.APIInterface;
+import com.duboscq.nicolas.mynews.utils.RetrofitUtility;
 
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class MostPopularFragment extends Fragment {
     }
 
     private void articleCall (){
-        APIInterface apiInterface = APIInterface.retrofit.create(APIInterface.class);
+        APIInterface apiInterface = RetrofitUtility.getInstance().create(APIInterface.class);
         Call<GeneralInfo> call = apiInterface.getMostPopular();
         call.enqueue(new Callback<GeneralInfo>() {
             @Override

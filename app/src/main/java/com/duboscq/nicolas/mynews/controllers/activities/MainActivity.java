@@ -7,11 +7,15 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
 import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.adapters.ViewPagerAdapter;
 import com.duboscq.nicolas.mynews.controllers.fragments.TopStoriesFragment;
@@ -58,6 +62,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.action_help:
                 break;
             case R.id.action_about:
+                AlertDialog.Builder about_popup_diag = new AlertDialog.Builder(this);
+                LayoutInflater inflater = getLayoutInflater();
+                View about_popup_view = inflater.inflate(R.layout.about_popup,null);
+                about_popup_diag.setView(about_popup_view);
+                about_popup_diag.show();
                 break;
             case R.id.action_search:
                 Intent search_intent = new Intent(this ,SearchActivity.class);

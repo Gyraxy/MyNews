@@ -1,5 +1,6 @@
 package com.duboscq.nicolas.mynews.controllers.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,9 +13,12 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.adapters.ArticleRecyclerViewAdapter;
+import com.duboscq.nicolas.mynews.controllers.activities.ArticleWebViewActivity;
 import com.duboscq.nicolas.mynews.models.Articles;
 import com.duboscq.nicolas.mynews.models.GeneralInfo;
 import com.duboscq.nicolas.mynews.utils.APIInterface;
+import com.duboscq.nicolas.mynews.utils.ItemClickSupport;
+import com.duboscq.nicolas.mynews.utils.RetrofitUtility;
 
 import java.util.List;
 
@@ -23,6 +27,7 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * Created by DUBOSCQ Nicolas
@@ -67,14 +72,28 @@ public class TopStoriesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
+    private void configureOnClickRecyclerView(){
+        RecyclerView recyclerView = getView().findViewById(R.id.article_recycler_view);
+        ItemClickSupport.addTo(recyclerView, R.layout.fragment_articles)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        Intent i = new Intent(getActivity(),ArticleWebViewActivity.class);
+                        i.putExtra("article_url",article_top_stories_list.get(position).getUrl());
+                        startActivity(i);
+                    }
+                });
+    }
+
     private void configureAndShowArticle (){
-        APIInterface apiInterface = APIInterface.retrofit.create(APIInterface.class);
+        APIInterface apiInterface = RetrofitUtility.getInstance().create(APIInterface.class);
         Call<GeneralInfo> call = apiInterface.getTopStories();
         call.enqueue(new Callback<GeneralInfo>() {
             @Override
             public void onResponse(Call<GeneralInfo> call, Response<GeneralInfo> response) {
                 article_top_stories_list = response.body().getResults();
                 configureRecyclerView();
+                configureOnClickRecyclerView();
             }
 
             @Override
