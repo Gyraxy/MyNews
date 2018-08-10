@@ -16,15 +16,9 @@ public class GeneralInfo {
     @SerializedName("copyright")
     @Expose
     private String copyright;
-    @SerializedName("section")
-    @Expose
-    private String section;
     @SerializedName("last_updated")
     @Expose
     private String lastUpdated;
-    @SerializedName("num_results")
-    @Expose
-    private Integer numResults;
     @SerializedName("results")
     @Expose
     private List<Articles> results = null;
@@ -50,28 +44,12 @@ public class GeneralInfo {
         this.copyright = copyright;
     }
 
-    public String getSection() {
-        return section;
-    }
-
-    public void setSection(String section) {
-        this.section = section;
-    }
-
     public String getLastUpdated() {
         return lastUpdated;
     }
 
     public void setLastUpdated(String lastUpdated) {
         this.lastUpdated = lastUpdated;
-    }
-
-    public Integer getNumResults() {
-        return numResults;
-    }
-
-    public void setNumResults(Integer numResults) {
-        this.numResults = numResults;
     }
 
     public List<Articles> getResults() {

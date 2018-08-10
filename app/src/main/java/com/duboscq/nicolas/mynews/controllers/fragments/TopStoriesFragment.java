@@ -35,7 +35,11 @@ import retrofit2.Retrofit;
 
 public class TopStoriesFragment extends Fragment {
 
+    //FOR DESIGN
     @BindView(R.id.article_swipe_container) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.article_recycler_view) RecyclerView recyclerView;
+
+    //FOR DATA
     List<Articles> article_top_stories_list;
     ArticleRecyclerViewAdapter adapter;
 
@@ -49,10 +53,10 @@ public class TopStoriesFragment extends Fragment {
 
     @Override
         public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            final View view = inflater.inflate(R.layout.fragment_articles, container, false);
+            View view = inflater.inflate(R.layout.fragment_articles, container, false);
             ButterKnife.bind(this, view);
             configureAndShowArticle();
-            //configureSwipeRefreshLayout();
+            configureSwipeRefreshLayout();
             return view;
     }
 
@@ -66,23 +70,21 @@ public class TopStoriesFragment extends Fragment {
     }
 
     private void configureRecyclerView (){
-        RecyclerView recyclerView = getView().findViewById(R.id.article_recycler_view);
         adapter = new ArticleRecyclerViewAdapter(getContext(),article_top_stories_list, Glide.with(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void configureOnClickRecyclerView(){
-        RecyclerView recyclerView = getView().findViewById(R.id.article_recycler_view);
         ItemClickSupport.addTo(recyclerView, R.layout.fragment_articles)
-                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        Intent i = new Intent(getActivity(),ArticleWebViewActivity.class);
-                        i.putExtra("article_url",article_top_stories_list.get(position).getUrl());
-                        startActivity(i);
-                    }
-                });
+                        .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                            @Override
+                            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                                Intent i = new Intent(getActivity(),ArticleWebViewActivity.class);
+                                i.putExtra("article_url",article_top_stories_list.get(position).getUrl());
+                                startActivity(i);
+                            }
+                        });
     }
 
     private void configureAndShowArticle (){
@@ -94,6 +96,7 @@ public class TopStoriesFragment extends Fragment {
                 article_top_stories_list = response.body().getResults();
                 configureRecyclerView();
                 configureOnClickRecyclerView();
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override

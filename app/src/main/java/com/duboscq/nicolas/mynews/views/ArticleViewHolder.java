@@ -10,7 +10,9 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.models.Articles;
+import com.duboscq.nicolas.mynews.models.ArticlesMostPopular;
 import com.duboscq.nicolas.mynews.models.Multimedia;
+import com.duboscq.nicolas.mynews.utils.DateUtility;
 
 import java.util.List;
 
@@ -34,10 +36,10 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
     public void updateArticleinfo (Articles articles,RequestManager glide) {
         article_summary_txt.setText(articles.getTitle());
-        article_title_txt.setText(articles.getSection());
-
+        article_date_txt.setText(DateUtility.convertingDate(articles.getPublishedDate()));
         if(articles.getMultimedia() != null && articles.getMultimedia().size() > 0) {
             glide.load(articles.getMultimedia().get(0).getUrl()).into(article_picture_img);
         }
+        article_title_txt.setText(articles.getSection());
     }
 }

@@ -1,10 +1,12 @@
 package com.duboscq.nicolas.mynews.controllers.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +14,11 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.adapters.ArticleRecyclerViewAdapter;
+import com.duboscq.nicolas.mynews.controllers.activities.ArticleWebViewActivity;
 import com.duboscq.nicolas.mynews.models.Articles;
 import com.duboscq.nicolas.mynews.models.GeneralInfo;
 import com.duboscq.nicolas.mynews.utils.APIInterface;
+import com.duboscq.nicolas.mynews.utils.ItemClickSupport;
 import com.duboscq.nicolas.mynews.utils.RetrofitUtility;
 
 import java.util.List;
@@ -31,7 +35,11 @@ import retrofit2.Response;
 
 public class MostPopularFragment extends Fragment {
 
+    //FOR DESIGN
     @BindView(R.id.article_swipe_container) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.article_recycler_view) RecyclerView recyclerView;
+
+    //FOR DATA
     List<Articles> article_most_popular_list;
     ArticleRecyclerViewAdapter adapter;
 
@@ -46,8 +54,8 @@ public class MostPopularFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_articles, container, false);
         ButterKnife.bind(this, view);
-        articleCall();
-        //configureSwipeRefreshLayout();
+        configureAndShowArticle();
+        configureSwipeRefreshLayout();
         return view;
     }
 
@@ -55,18 +63,30 @@ public class MostPopularFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                configureAndShowArticle();
             }
         });
     }
 
     private void configureRecyclerView (){
-        RecyclerView recyclerView = getView().findViewById(R.id.article_recycler_view);
         adapter = new ArticleRecyclerViewAdapter(getContext(),article_most_popular_list, Glide.with(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    private void articleCall (){
+    private void configureOnClickRecyclerView(){
+        ItemClickSupport.addTo(recyclerView, R.layout.fragment_articles)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        Intent i = new Intent(getActivity(),ArticleWebViewActivity.class);
+                        i.putExtra("article_url",article_most_popular_list.get(position).getUrl());
+                        startActivity(i);
+                    }
+                });
+    }
+
+    private void configureAndShowArticle (){
         APIInterface apiInterface = RetrofitUtility.getInstance().create(APIInterface.class);
         Call<GeneralInfo> call = apiInterface.getMostPopular();
         call.enqueue(new Callback<GeneralInfo>() {
@@ -74,11 +94,12 @@ public class MostPopularFragment extends Fragment {
             public void onResponse(Call<GeneralInfo> call, Response<GeneralInfo> response) {
                 article_most_popular_list = response.body().getResults();
                 configureRecyclerView();
+                configureOnClickRecyclerView();
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<GeneralInfo> call, Throwable t) {
-
             }
         });
     }

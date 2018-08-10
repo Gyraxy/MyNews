@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyNews</string>
+    <string name="app_name">My News</string>
 
     <!-- MENU STRINGS -->
     <string name="notifications">Notifications</string>
