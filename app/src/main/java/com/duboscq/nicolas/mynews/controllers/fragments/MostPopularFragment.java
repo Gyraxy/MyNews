@@ -40,7 +40,7 @@ public class MostPopularFragment extends Fragment {
     @BindView(R.id.article_recycler_view) RecyclerView recyclerView;
 
     //FOR DATA
-    List<Articles> article_most_popular_list;
+    List<Articles> article;
     ArticleRecyclerViewAdapter adapter;
 
     public MostPopularFragment(){ }
@@ -69,7 +69,7 @@ public class MostPopularFragment extends Fragment {
     }
 
     private void configureRecyclerView (){
-        adapter = new ArticleRecyclerViewAdapter(getContext(),article_most_popular_list, Glide.with(this));
+        adapter = new ArticleRecyclerViewAdapter(getContext(),article, Glide.with(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
@@ -80,7 +80,7 @@ public class MostPopularFragment extends Fragment {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         Intent i = new Intent(getActivity(),ArticleWebViewActivity.class);
-                        i.putExtra("article_url",article_most_popular_list.get(position).getUrl());
+                        i.putExtra("article_url",article.get(position).getUrl());
                         startActivity(i);
                     }
                 });
@@ -92,7 +92,7 @@ public class MostPopularFragment extends Fragment {
         call.enqueue(new Callback<GeneralInfo>() {
             @Override
             public void onResponse(Call<GeneralInfo> call, Response<GeneralInfo> response) {
-                article_most_popular_list = response.body().getResults();
+                article = response.body().getResults();
                 configureRecyclerView();
                 configureOnClickRecyclerView();
                 swipeRefreshLayout.setRefreshing(false);

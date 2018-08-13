@@ -5,13 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.models.Articles;
 import com.duboscq.nicolas.mynews.views.ArticleViewHolder;
-import java.util.ArrayList;
+
 import java.util.List;
 
 
@@ -40,7 +39,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleView
 
     @Override
     public void onBindViewHolder(ArticleViewHolder ArticleViewHolder,int position) {
-        ArticleViewHolder.updateArticleinfo(this.articles.get(position),this.glide);
+            ArticleViewHolder.updateArticleinfo(this.articles.get(position), this.glide);
     }
 
     @Override

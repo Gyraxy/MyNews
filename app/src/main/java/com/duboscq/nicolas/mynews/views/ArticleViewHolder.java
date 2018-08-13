@@ -5,16 +5,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.request.RequestOptions;
 import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.models.Articles;
-import com.duboscq.nicolas.mynews.models.ArticlesMostPopular;
-import com.duboscq.nicolas.mynews.models.Multimedia;
 import com.duboscq.nicolas.mynews.utils.DateUtility;
-
-import java.util.List;
 
 /**
  * Created by Nicolas DUBOSCQ on 24/07/2018
@@ -34,11 +28,15 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
         article_picture_img = itemView.findViewById(R.id.recycler_view_imv_article_image);
     }
 
-    public void updateArticleinfo (Articles articles,RequestManager glide) {
+    public void updateArticleinfo(Articles articles,RequestManager glide) {
         article_summary_txt.setText(articles.getTitle());
         article_date_txt.setText(DateUtility.convertingDate(articles.getPublishedDate()));
         if(articles.getMultimedia() != null && articles.getMultimedia().size() > 0) {
             glide.load(articles.getMultimedia().get(0).getUrl()).into(article_picture_img);
+        }
+
+        if(articles.getMedia() != null && articles.getMedia().size() > 0){
+            glide.load(articles.getMedia().get(0).getMetaMedia().get(0).getUrl()).into(article_picture_img);
         }
         article_title_txt.setText(articles.getSection());
     }

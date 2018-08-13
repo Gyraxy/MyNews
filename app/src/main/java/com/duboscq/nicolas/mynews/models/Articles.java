@@ -13,6 +13,9 @@ public class Articles {
     @SerializedName("section")
     @Expose
     private String section;
+    @SerializedName("subsection")
+    @Expose
+    private String subsection;
     @SerializedName("title")
     @Expose
     private String title;
@@ -28,11 +31,17 @@ public class Articles {
     @SerializedName("multimedia")
     @Expose
     private List<Multimedia> multimedia = null;
-
+    @SerializedName("media")
+    @Expose
+    private List<Media> media = null;
 
 
     public String getSection() {
         return section;
+    }
+
+    public String getSubsection() {
+        return subsection;
     }
 
     public void setSection(String section) {
@@ -77,6 +86,14 @@ public class Articles {
 
     public void setMultimedia(List<Multimedia> multimedia) {
         this.multimedia = multimedia;
+    }
+
+    public List<Media> getMedia() {
+        return media;
+    }
+
+    public void setMedia(List<Media> media) {
+        this.media = media;
     }
 
 }

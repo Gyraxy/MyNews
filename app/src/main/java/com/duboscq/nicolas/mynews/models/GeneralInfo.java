@@ -16,12 +16,13 @@ public class GeneralInfo {
     @SerializedName("copyright")
     @Expose
     private String copyright;
-    @SerializedName("last_updated")
-    @Expose
-    private String lastUpdated;
     @SerializedName("results")
     @Expose
     private List<Articles> results = null;
+    @SerializedName("docs")
+    @Expose
+    private List<Docs> docs = null;
+
 
     public GeneralInfo(String status,List<Articles> results) {
         this.status=status;
@@ -44,14 +45,6 @@ public class GeneralInfo {
         this.copyright = copyright;
     }
 
-    public String getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(String lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
     public List<Articles> getResults() {
         return results;
     }
@@ -59,5 +52,13 @@ public class GeneralInfo {
     public List<Articles> setResults(List<Articles> results) {
         this.results = results;
         return results;
+    }
+    public List<Docs> getDocs() {
+        return docs;
+    }
+
+    public List<Docs> setDocs(List<Docs> docs) {
+        this.docs = docs;
+        return docs;
     }
 }

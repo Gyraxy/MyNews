@@ -18,8 +18,7 @@ public interface APIInterface {
         @GET("mostpopular/v2/mostshared/all-sections/7.json?api-key=c5ee5b8a2b004651bd6337f0f785469b")
         Call<GeneralInfo> getMostPopular();
 
-        public static final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.nytimes.com/svc/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        @GET("search/v2/articlesearch.json?q=new+york+times&page=2&sort=oldest&api-key=c5ee5b8a2b004651bd6337f0f785469b")
+        Call<GeneralInfo> getCustom();
+
 }
