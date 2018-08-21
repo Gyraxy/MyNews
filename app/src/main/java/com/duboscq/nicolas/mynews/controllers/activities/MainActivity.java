@@ -18,7 +18,6 @@ import android.view.View;
 
 import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.adapters.ViewPagerAdapter;
-import com.duboscq.nicolas.mynews.controllers.fragments.TopStoriesFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

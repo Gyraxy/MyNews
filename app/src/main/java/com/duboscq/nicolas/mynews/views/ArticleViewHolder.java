@@ -38,6 +38,9 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
         if(articles.getMedia() != null && articles.getMedia().size() > 0){
             glide.load(articles.getMedia().get(0).getMetaMedia().get(0).getUrl()).into(article_picture_img);
         }
-        article_title_txt.setText(articles.getSection());
+
+        if(articles.getSubsection() == "" || articles.getSubsection() == null) {
+            article_title_txt.setText(articles.getSection());
+        } else article_title_txt.setText(articles.getSection()+">"+articles.getSubsection());
     }
 }

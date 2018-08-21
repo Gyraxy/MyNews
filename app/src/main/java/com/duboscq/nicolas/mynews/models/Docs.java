@@ -3,6 +3,8 @@ package com.duboscq.nicolas.mynews.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by Nicolas DUBOSCQ on 10/08/2018
  */
@@ -14,9 +16,9 @@ public class Docs {
         @SerializedName("snippet")
         @Expose
         private String snippet;
-        @SerializedName("print_page")
+        @SerializedName("section_name")
         @Expose
-        private String printPage;
+        private String section_name;
         @SerializedName("source")
         @Expose
         private String source;
@@ -38,6 +40,21 @@ public class Docs {
         @SerializedName("score")
         @Expose
         private Double score;
+        @SerializedName("headline")
+        @Expose
+        private Headline headline;
+        @SerializedName("keywords")
+        @Expose
+        private List<Keywords> keywords = null;
+        @SerializedName("multimedia")
+        @Expose
+        private List<Multimedia> multimedia = null;
+
+
+        public Docs(Headline headline) {
+            this.headline=headline;
+        }
+
 
         public String getWebUrl() {
             return webUrl;
@@ -55,12 +72,12 @@ public class Docs {
             this.snippet = snippet;
         }
 
-        public String getPrintPage() {
-            return printPage;
+        public String getSection_name() {
+            return section_name;
         }
 
-        public void setPrintPage(String printPage) {
-            this.printPage = printPage;
+        public void setSection_name(String section_name) {
+            this.section_name = section_name;
         }
 
         public String getSource() {
@@ -117,5 +134,25 @@ public class Docs {
 
         public void setScore(Double score) {
             this.score = score;
+        }
+
+        public Headline getHeadline() {
+        return headline;
+    }
+
+        public List<Keywords> getKeywords() {
+            return keywords;
+        }
+
+        public void setKeywords(List<Keywords> keywords) {
+            this.keywords = keywords;
+    }
+
+        public List<Multimedia> getMultimedia() {
+            return multimedia;
+        }
+
+        public void setMultimedia(List<Multimedia> multimedia) {
+            this.multimedia = multimedia;
         }
 }
