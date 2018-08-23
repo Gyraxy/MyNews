@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.duboscq.nicolas.mynews.controllers.fragments.CustomNewsFragment;
 import com.duboscq.nicolas.mynews.controllers.fragments.MostPopularFragment;
+import com.duboscq.nicolas.mynews.controllers.fragments.SearchNewsFragment;
 import com.duboscq.nicolas.mynews.controllers.fragments.TopStoriesFragment;
 
 /**
@@ -20,7 +21,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return (3);
+        return (4);
     }
 
     @Override
@@ -32,6 +33,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                 return MostPopularFragment.newInstance();
             case 2:
                 return CustomNewsFragment.newInstance();
+            case 3:
+                return SearchNewsFragment.newInstance();
             default:
                 return null;
         }
@@ -46,7 +49,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case 1: //Page number 2
                 return "MOST POPULAR";
             case 2: //Page number 3
-                return "CUSTOM";
+                return "WEEKLY";
+            case 3:
+                return "SEARCH";
             default:
                 return null;
         }

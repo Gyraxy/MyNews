@@ -28,16 +28,16 @@ public class DocsViewHolder extends RecyclerView.ViewHolder {
         article_picture_img = itemView.findViewById(R.id.recycler_view_imv_article_image);
     }
 
-    public void updateDocsinfo(Docs docs, RequestManager glide,String section) {
+    public void updateDocsinfo(Docs docs, RequestManager glide) {
         article_summary_txt.setText(docs.getHeadline().getMain());
 
         if (docs.getPubDate() != null) {
             article_date_txt.setText(DateUtility.convertingDate(docs.getPubDate()));
         }
 
-        article_title_txt.setText(section.substring(0,1).toUpperCase()+section.substring(1));
+        article_title_txt.setText(docs.getTypeOfMaterial());
 
-        //if(docs.getMultimedia().get(2) != null && docs.getMultimedia().size() > 0) {
-        //    glide.load("https://www.nytimes.com/"+docs.getMultimedia().get(2).getUrl()).into(article_picture_img);}
+        if(docs.getMultimedia().size()>0 && docs.getMultimedia().get(2) != null && docs.getMultimedia().size() > 0) {
+            glide.load("https://www.nytimes.com/"+docs.getMultimedia().get(2).getUrl()).into(article_picture_img);}
     }
 }

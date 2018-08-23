@@ -30,4 +30,22 @@ public class DateUtility {
         return convertedDate;
     }
 
+    public static String convertingSearchDate(String date) {
+
+        @SuppressLint("SimpleDateFormat") DateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+        @SuppressLint("SimpleDateFormat") DateFormat outputFormat = new SimpleDateFormat("yyyyMMdd");
+
+        String convertedDate = "";
+
+        try {
+            Date date_parse = inputFormat.parse(date);
+            convertedDate = outputFormat.format(date_parse);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
+    }
+
 }

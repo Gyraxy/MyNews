@@ -1,8 +1,11 @@
 package com.duboscq.nicolas.mynews.controllers.activities;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +21,7 @@ import android.view.View;
 
 import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.adapters.ViewPagerAdapter;
+import com.duboscq.nicolas.mynews.controllers.fragments.CustomNewsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //FOR DESIGN
     @BindView(R.id.activity_main_tabs) TabLayout tabs;
+    @BindView(R.id.activity_main_viewpager) ViewPager pager;
+
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -85,9 +91,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //VIEWPAGER CONFIGURATION AND TABS
     private void configureViewPagerAndTabs(){
-
-        ViewPager pager = findViewById(R.id.activity_main_viewpager);
         pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
+        int tabToOpen = getIntent().getIntExtra("TABS", -1);
+        if (tabToOpen!=-1) {
+            pager.setCurrentItem(3);
+        }else pager.setCurrentItem(0);
         tabs= findViewById(R.id.activity_main_tabs);
         tabs.setupWithViewPager(pager);
         tabs.setTabMode(TabLayout.MODE_FIXED);
@@ -148,5 +156,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }

@@ -21,13 +21,11 @@ public class DocsRecyclerViewAdapter extends RecyclerView.Adapter<DocsViewHolder
     private List<Docs> docs;
     private Context mContext;
     private RequestManager glide;
-    private String section;
 
-    public DocsRecyclerViewAdapter(Context mContext,List<Docs> docs,RequestManager glide,String section) {
+    public DocsRecyclerViewAdapter(Context mContext,List<Docs> docs,RequestManager glide) {
         this.docs = docs;
         this.mContext = mContext;
         this.glide=glide;
-        this.section=section;
     }
 
     @Override
@@ -40,7 +38,7 @@ public class DocsRecyclerViewAdapter extends RecyclerView.Adapter<DocsViewHolder
 
     @Override
     public void onBindViewHolder(DocsViewHolder DocsViewHolder,int position) {
-        DocsViewHolder.updateDocsinfo(this.docs.get(position), this.glide,this.section);
+        DocsViewHolder.updateDocsinfo(this.docs.get(position), this.glide);
     }
 
     @Override

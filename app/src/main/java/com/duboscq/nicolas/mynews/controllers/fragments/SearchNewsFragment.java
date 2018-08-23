@@ -1,5 +1,6 @@
 package com.duboscq.nicolas.mynews.controllers.fragments;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,7 +18,6 @@ import com.duboscq.nicolas.mynews.controllers.activities.ArticleWebViewActivity;
 import com.duboscq.nicolas.mynews.models.Docs;
 import com.duboscq.nicolas.mynews.models.GeneralInfo;
 import com.duboscq.nicolas.mynews.utils.APIInterface;
-import com.duboscq.nicolas.mynews.utils.DateUtility;
 import com.duboscq.nicolas.mynews.utils.ItemClickSupport;
 import com.duboscq.nicolas.mynews.utils.RetrofitUtility;
 
@@ -29,12 +29,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by DUBOSCQ Nicolas
- */
 
-public class CustomNewsFragment extends Fragment {
-
+public class SearchNewsFragment extends Fragment {
     //FOR DESIGN
     @BindView(R.id.article_swipe_container)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -44,22 +40,24 @@ public class CustomNewsFragment extends Fragment {
     //FOR DATA
     List<Docs> docs;
     DocsRecyclerViewAdapter adapter;
-    String section_custom;
+    String begin_date;
+    String end_date;
+    String section;
 
-    public CustomNewsFragment(){ }
+    public SearchNewsFragment(){ }
 
-    public static CustomNewsFragment newInstance() {
-        return (new CustomNewsFragment());
+    public static SearchNewsFragment newInstance() {
+        return (new SearchNewsFragment());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_articles, container, false);
         ButterKnife.bind(this, view);
-        Bundle args = getArguments();
-        if (args!=null) {
-            String value = args.getString("SECTION_CUSTOM");
-            System.out.println("test"+value);
+        getSearchInfo();
+        if (section!=null) {
+            configureAndShowDocs();
+            configureSwipeRefreshLayout();
         }
         return view;
     }
@@ -91,7 +89,7 @@ public class CustomNewsFragment extends Fragment {
     }
     private void configureAndShowDocs (){
         APIInterface apiInterface = RetrofitUtility.getInstance().create(APIInterface.class);
-        Call<GeneralInfo> call = apiInterface.getWeekly(section_custom);
+        Call<GeneralInfo> call = apiInterface.getSearch(section,begin_date,end_date);
         call.enqueue(new Callback<GeneralInfo>() {
             @Override
             public void onResponse(Call<GeneralInfo> call, Response<GeneralInfo> response) {
@@ -105,5 +103,12 @@ public class CustomNewsFragment extends Fragment {
             public void onFailure(Call<GeneralInfo> call, Throwable t) {
             }
         });
+    }
+
+    private void getSearchInfo(){
+        begin_date= (getActivity().getIntent().getStringExtra("BEGIN_DATE"));
+        end_date = (getActivity().getIntent().getStringExtra("END_DATE"));
+        section = (getActivity().getIntent().getStringExtra("SECTION"));
+        System.out.println(begin_date+" "+end_date);
     }
 }
