@@ -21,7 +21,8 @@ public interface APIInterface {
         Call<GeneralInfo> getWeekly(@Query("fq") String section_name);
 
         @GET("search/v2/articlesearch.json?&sort=newest&api-key=c5ee5b8a2b004651bd6337f0f785469b")
-        Call<GeneralInfo> getSearch(@Query("fq") String section_name,
+        Call<GeneralInfo> getSearch(@Query("fq") String query,
+                                    @Query("q") String section_name,
                                     @Query("begin_date") String begin_date,
                                     @Query("end_date") String end_date);
 

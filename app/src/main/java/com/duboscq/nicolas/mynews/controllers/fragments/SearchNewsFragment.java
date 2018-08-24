@@ -1,5 +1,9 @@
 package com.duboscq.nicolas.mynews.controllers.fragments;
 
+/**
+ * Created by Nicolas DUBOSCQ on 24/08/2018
+ */
+
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,6 +47,7 @@ public class SearchNewsFragment extends Fragment {
     String begin_date;
     String end_date;
     String section;
+    String search_query;
 
     public SearchNewsFragment(){ }
 
@@ -89,7 +94,7 @@ public class SearchNewsFragment extends Fragment {
     }
     private void configureAndShowDocs (){
         APIInterface apiInterface = RetrofitUtility.getInstance().create(APIInterface.class);
-        Call<GeneralInfo> call = apiInterface.getSearch(section,begin_date,end_date);
+        Call<GeneralInfo> call = apiInterface.getSearch(search_query,section,begin_date,end_date);
         call.enqueue(new Callback<GeneralInfo>() {
             @Override
             public void onResponse(Call<GeneralInfo> call, Response<GeneralInfo> response) {

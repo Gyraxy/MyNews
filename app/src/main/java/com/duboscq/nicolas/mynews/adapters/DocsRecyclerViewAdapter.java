@@ -19,12 +19,11 @@ import java.util.List;
 public class DocsRecyclerViewAdapter extends RecyclerView.Adapter<DocsViewHolder>{
 
     private List<Docs> docs;
-    private Context mContext;
     private RequestManager glide;
 
     public DocsRecyclerViewAdapter(Context mContext,List<Docs> docs,RequestManager glide) {
         this.docs = docs;
-        this.mContext = mContext;
+        Context context = mContext;
         this.glide=glide;
     }
 

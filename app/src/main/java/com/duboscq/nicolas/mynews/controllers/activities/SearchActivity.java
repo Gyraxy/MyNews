@@ -1,7 +1,9 @@
 package com.duboscq.nicolas.mynews.controllers.activities;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import com.duboscq.nicolas.mynews.models.Docs;
 import com.duboscq.nicolas.mynews.models.GeneralInfo;
 import com.duboscq.nicolas.mynews.utils.APIInterface;
 import com.duboscq.nicolas.mynews.utils.DateUtility;
+import com.duboscq.nicolas.mynews.utils.ItemClickSupport;
 import com.duboscq.nicolas.mynews.utils.RetrofitUtility;
 
 import java.text.SimpleDateFormat;
@@ -37,8 +40,6 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.content.ContentValues.TAG;
 
 public class SearchActivity extends AppCompatActivity{
 
@@ -64,6 +65,7 @@ public class SearchActivity extends AppCompatActivity{
     @BindView(R.id.activity_search_end_date_edt) EditText search_end_date;
 
 
+
     //--FOR DATA--
     String search_query;
     String begin_date;
@@ -73,8 +75,7 @@ public class SearchActivity extends AppCompatActivity{
     DatePickerDialog mDatePickerDialogbegin;
     DatePickerDialog mDatePickerDialogend;
     List<Docs> docs;
-    private RecyclerView mRecyclerView;
-    private DocsRecyclerViewAdapter mDocsAdapter;
+    private RecyclerView recyclerView;
 
 
     @Override
@@ -111,19 +112,22 @@ public class SearchActivity extends AppCompatActivity{
         } else if (arts_chb.isChecked() == false && business_chb.isChecked() == false && entrepreneurs_chb.isChecked() == false && politics_chb.isChecked() == false && sports_chb.isChecked() == false && travel_chb.isChecked() == false) {
             Toast.makeText(this, "Please select at least one category", Toast.LENGTH_SHORT).show();
         } else {
-            Intent new_search = new Intent(this, MainActivity.class);
             getSearchInfo();
             checkBoxName();
-            new_search.putExtra("TABS", 2);
-            new_search.putExtra("BEGIN_DATE", begin_date);
-            new_search.putExtra("END_DATE", end_date);
-            new_search.putExtra("SECTION", section);
-            System.out.println(section);
-            startActivity(new_search);
-            //startSearchApiCall();
+            startSearchApiCall();
+            //Intent new_search = new Intent(this, MainActivity.class);
+            //new_search.putExtra("TABS", 2);
+            //new_search.putExtra("BEGIN_DATE", begin_date);
+            //new_search.putExtra("END_DATE", end_date);
+            //new_search.putExtra("SECTION", section);
+            //System.out.println(section);
+            //startActivity(new_search);
         }
     }
 
+    // -----------------------------
+    // SEARCHACTIVITY DESIGN TOOLBAR
+    // -----------------------------
 
     private void configureSearchToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -132,9 +136,40 @@ public class SearchActivity extends AppCompatActivity{
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
+
+    // ---------------------------------------------
+    // CONFIGURE RECYCLERVIEW + ONCLICK RECYCLERVIEW
+    // ---------------------------------------------
+
+    //RECYCLER VIEW
+    private void configureRecyclerView(){
+        setContentView(R.layout.fragment_articles);
+        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.article_swipe_container);
+        recyclerView=findViewById(R.id.article_recycler_view);
+        DocsRecyclerViewAdapter adapter = new DocsRecyclerViewAdapter(SearchActivity.this, docs, Glide.with(SearchActivity.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setAdapter(adapter);
+        swipeRefreshLayout.setEnabled(false);
+    }
+
+    //ONCLICK RECYCLERVIEW
+    private void configureOnClickRecyclerView(){
+        ItemClickSupport.addTo(recyclerView, R.layout.fragment_articles)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        Intent i = new Intent(getApplicationContext(),ArticleWebViewActivity.class);
+                        i.putExtra("article_url",docs.get(position).getWebUrl());
+                        startActivity(i);
+                    }
+                });
+    }
+
     private void getSearchInfo() {
         begin_date = DateUtility.convertingSearchDate(search_begin_date.getText().toString());
         end_date = DateUtility.convertingSearchDate(search_end_date.getText().toString());
+        search_query = search_edt.getText().toString();
+
     }
 
     private void checkBoxName() {
@@ -193,19 +228,24 @@ public class SearchActivity extends AppCompatActivity{
 
     }
 
+
+    // ---------------------------------------------------------
+    // API CALL AND SHOW RECYCLERVIEW IF RESULTS OR POPUP IF NOT
+    // ---------------------------------------------------------
+
     private void startSearchApiCall() {
 
         APIInterface apiInterface = RetrofitUtility.getInstance().create(APIInterface.class);
-        Call<GeneralInfo> call = apiInterface.getSearch(section,begin_date,end_date);
+        Call<GeneralInfo> call = apiInterface.getSearch(search_query,section,begin_date,end_date);
         call.enqueue(new Callback<GeneralInfo>() {
             @Override
             public void onResponse(Call<GeneralInfo> call, Response<GeneralInfo> response) {
                 docs = response.body().getResponse().getDocs();
-                setContentView(R.layout.fragment_articles);
-                mRecyclerView = findViewById(R.id.article_recycler_view);
-                mDocsAdapter = new DocsRecyclerViewAdapter(SearchActivity.this, docs,Glide.with(SearchActivity.this));
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                mRecyclerView.setAdapter(mDocsAdapter);
+                if (docs.size()==0){
+                    noResultsPopup();
+                } else
+                    configureRecyclerView();
+                    configureOnClickRecyclerView();
             }
 
             @Override
@@ -213,5 +253,14 @@ public class SearchActivity extends AppCompatActivity{
             }
         });
 
+    }
+
+    //POPUP WHEN NO RESULTS WHERE FOUND
+
+    private void noResultsPopup (){
+        final AlertDialog.Builder no_results_popup = new AlertDialog.Builder(this);
+        no_results_popup.setTitle("Informations");
+        no_results_popup.setMessage("No results were found. Please try other words");
+        no_results_popup.show();
     }
 }

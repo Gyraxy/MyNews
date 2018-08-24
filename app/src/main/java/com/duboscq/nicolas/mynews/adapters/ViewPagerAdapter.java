@@ -21,7 +21,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return (4);
+        return (3);
     }
 
     @Override
@@ -33,8 +33,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                 return MostPopularFragment.newInstance();
             case 2:
                 return CustomNewsFragment.newInstance();
-            case 3:
-                return SearchNewsFragment.newInstance();
+            //case 3:
+            //    return SearchNewsFragment.newInstance();
             default:
                 return null;
         }
@@ -50,8 +50,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                 return "MOST POPULAR";
             case 2: //Page number 3
                 return "WEEKLY";
-            case 3:
-                return "SEARCH";
+            //case 3:
+            //    return "SEARCH";
             default:
                 return null;
         }
