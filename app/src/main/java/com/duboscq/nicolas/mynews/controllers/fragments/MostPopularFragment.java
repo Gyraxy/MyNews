@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +68,7 @@ public class MostPopularFragment extends Fragment {
     }
 
     private void configureRecyclerView (){
-        adapter = new ArticleRecyclerViewAdapter(getContext(),article, Glide.with(this));
+        adapter = new ArticleRecyclerViewAdapter(article, Glide.with(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }

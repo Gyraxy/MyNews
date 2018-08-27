@@ -4,7 +4,6 @@ package com.duboscq.nicolas.mynews.controllers.fragments;
  * Created by Nicolas DUBOSCQ on 24/08/2018
  */
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -66,6 +65,7 @@ public class SearchNewsFragment extends Fragment {
         }
         return view;
     }
+
     private void configureSwipeRefreshLayout(){
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -76,7 +76,7 @@ public class SearchNewsFragment extends Fragment {
     }
 
     private void configureRecyclerView (){
-        adapter = new DocsRecyclerViewAdapter(getContext(),docs, Glide.with(this));
+        adapter = new DocsRecyclerViewAdapter(docs, Glide.with(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
@@ -92,6 +92,7 @@ public class SearchNewsFragment extends Fragment {
                     }
                 });
     }
+
     private void configureAndShowDocs (){
         APIInterface apiInterface = RetrofitUtility.getInstance().create(APIInterface.class);
         Call<GeneralInfo> call = apiInterface.getSearch(search_query,section,begin_date,end_date);
@@ -111,9 +112,5 @@ public class SearchNewsFragment extends Fragment {
     }
 
     private void getSearchInfo(){
-        begin_date= (getActivity().getIntent().getStringExtra("BEGIN_DATE"));
-        end_date = (getActivity().getIntent().getStringExtra("END_DATE"));
-        section = (getActivity().getIntent().getStringExtra("SECTION"));
-        System.out.println(begin_date+" "+end_date);
     }
 }

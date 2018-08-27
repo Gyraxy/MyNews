@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,19 +65,16 @@ public class SearchActivity extends AppCompatActivity{
     @BindView(R.id.activity_search_begin_date_edt) EditText search_begin_date;
     @BindView(R.id.activity_search_end_date_edt) EditText search_end_date;
 
-
-
     //--FOR DATA--
     String search_query;
-    String begin_date;
-    String end_date;
+    String begin_date=null;
+    String end_date=null;
     String section;
     Calendar newDate = Calendar.getInstance();
     DatePickerDialog mDatePickerDialogbegin;
     DatePickerDialog mDatePickerDialogend;
     List<Docs> docs;
     private RecyclerView recyclerView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,19 +107,19 @@ public class SearchActivity extends AppCompatActivity{
         search_query = search_edt.getText().toString();
         if (search_query.length() == 0) {
             Toast.makeText(this, "Please search one term", Toast.LENGTH_SHORT).show();
-        } else if (arts_chb.isChecked() == false && business_chb.isChecked() == false && entrepreneurs_chb.isChecked() == false && politics_chb.isChecked() == false && sports_chb.isChecked() == false && travel_chb.isChecked() == false) {
+        } else if (!arts_chb.isChecked()
+                && !business_chb.isChecked()
+                && !entrepreneurs_chb.isChecked()
+                && !politics_chb.isChecked()
+                && !sports_chb.isChecked()
+                && !travel_chb.isChecked()) {
             Toast.makeText(this, "Please select at least one category", Toast.LENGTH_SHORT).show();
+        } else if (!checkBeginDateBeforeEndDate()) {
+            Toast.makeText(this, "Begin Date is after End Date, please modify", Toast.LENGTH_SHORT).show();
         } else {
             getSearchInfo();
             checkBoxName();
             startSearchApiCall();
-            //Intent new_search = new Intent(this, MainActivity.class);
-            //new_search.putExtra("TABS", 2);
-            //new_search.putExtra("BEGIN_DATE", begin_date);
-            //new_search.putExtra("END_DATE", end_date);
-            //new_search.putExtra("SECTION", section);
-            //System.out.println(section);
-            //startActivity(new_search);
         }
     }
 
@@ -136,7 +134,6 @@ public class SearchActivity extends AppCompatActivity{
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-
     // ---------------------------------------------
     // CONFIGURE RECYCLERVIEW + ONCLICK RECYCLERVIEW
     // ---------------------------------------------
@@ -146,7 +143,7 @@ public class SearchActivity extends AppCompatActivity{
         setContentView(R.layout.fragment_articles);
         SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.article_swipe_container);
         recyclerView=findViewById(R.id.article_recycler_view);
-        DocsRecyclerViewAdapter adapter = new DocsRecyclerViewAdapter(SearchActivity.this, docs, Glide.with(SearchActivity.this));
+        DocsRecyclerViewAdapter adapter = new DocsRecyclerViewAdapter(docs, Glide.with(SearchActivity.this));
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout.setEnabled(false);
@@ -173,22 +170,22 @@ public class SearchActivity extends AppCompatActivity{
     }
 
     private void checkBoxName() {
-        if (arts_chb.isChecked() == true) {
+        if (!arts_chb.isChecked()) {
             section = "arts";
         }
-        if (business_chb.isChecked() == true) {
+        if (!business_chb.isChecked()) {
             section = "business";
         }
-        if (entrepreneurs_chb.isChecked() == true) {
+        if (!entrepreneurs_chb.isChecked()) {
             section = "entrepreneurs";
         }
-        if (politics_chb.isChecked() == true) {
+        if (!politics_chb.isChecked()) {
             section = "politics";
         }
-        if (sports_chb.isChecked() == true) {
+        if (!sports_chb.isChecked()) {
             section = "sports";
         }
-        if (travel_chb.isChecked() == true) {
+        if (!travel_chb.isChecked()) {
             section = "travel";
         }
     }
@@ -199,7 +196,7 @@ public class SearchActivity extends AppCompatActivity{
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 newDate.set(year, monthOfYear, dayOfMonth);
-                SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
                 final Date startDate = newDate.getTime();
                 String fdate = sd.format(startDate);
 
@@ -217,7 +214,7 @@ public class SearchActivity extends AppCompatActivity{
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 newDate.set(year, monthOfYear, dayOfMonth);
-                SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy",Locale.FRANCE);
                 final Date startDate = newDate.getTime();
                 String fdate = sd.format(startDate);
                 search_end_date.setText(fdate);
@@ -227,7 +224,6 @@ public class SearchActivity extends AppCompatActivity{
         mDatePickerDialogend.getDatePicker().setMaxDate(System.currentTimeMillis());
 
     }
-
 
     // ---------------------------------------------------------
     // API CALL AND SHOW RECYCLERVIEW IF RESULTS OR POPUP IF NOT
@@ -241,18 +237,18 @@ public class SearchActivity extends AppCompatActivity{
             @Override
             public void onResponse(Call<GeneralInfo> call, Response<GeneralInfo> response) {
                 docs = response.body().getResponse().getDocs();
-                if (docs.size()==0){
+                if (docs.isEmpty()){
                     noResultsPopup();
-                } else
+                } else {
                     configureRecyclerView();
                     configureOnClickRecyclerView();
+                }
             }
 
             @Override
             public void onFailure(Call<GeneralInfo> call, Throwable t) {
             }
         });
-
     }
 
     //POPUP WHEN NO RESULTS WHERE FOUND
@@ -262,5 +258,16 @@ public class SearchActivity extends AppCompatActivity{
         no_results_popup.setTitle("Informations");
         no_results_popup.setMessage("No results were found. Please try other words");
         no_results_popup.show();
+    }
+
+    private boolean checkBeginDateBeforeEndDate(){
+        int begin_date_edt = Integer.parseInt(DateUtility.convertingSearchDate(search_begin_date.getText().toString()));
+        int end_date_edt = Integer.parseInt(DateUtility.convertingSearchDate(search_end_date.getText().toString()));
+        System.out.println(begin_date_edt+" "+end_date_edt);
+
+        if (begin_date_edt < end_date_edt){
+            return true;
+        }
+        return false;
     }
 }

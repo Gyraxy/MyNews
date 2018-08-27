@@ -1,6 +1,5 @@
 package com.duboscq.nicolas.mynews.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +19,11 @@ import java.util.List;
 public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
 
     private List<Articles> articles;
-    private Context mContext;
     private RequestManager glide;
 
-    public ArticleRecyclerViewAdapter(Context mContext,List<Articles> articles,RequestManager glide) {
+    public ArticleRecyclerViewAdapter(List<Articles> articles, RequestManager glide) {
         this.articles = articles;
-        this.mContext = mContext;
-        this.glide=glide;
+        this.glide = glide;
     }
 
     @Override
@@ -36,18 +33,13 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleView
         return new ArticleViewHolder(view);
     }
 
-
     @Override
-    public void onBindViewHolder(ArticleViewHolder ArticleViewHolder,int position) {
+    public void onBindViewHolder(ArticleViewHolder ArticleViewHolder, int position) {
             ArticleViewHolder.updateArticleinfo(this.articles.get(position), this.glide);
     }
 
     @Override
     public int getItemCount() {
         return articles.size();
-    }
-
-    public Articles getInfo(int position){
-        return this.articles.get(position);
     }
 }

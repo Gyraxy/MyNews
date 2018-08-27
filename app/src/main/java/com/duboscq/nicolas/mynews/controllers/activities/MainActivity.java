@@ -18,6 +18,8 @@ import android.view.View;
 
 import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.adapters.ViewPagerAdapter;
+import com.duboscq.nicolas.mynews.controllers.fragments.CustomNewsFragment;
+import com.duboscq.nicolas.mynews.utils.SharedPreferencesUtility;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,9 +30,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.activity_main_tabs) TabLayout tabs;
     @BindView(R.id.activity_main_viewpager) ViewPager pager;
 
+    //FOR DATA
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.configureDrawerLayout();
         this.configureNavigationView();
     }
-
 
     //MENU DISPLAY
     @Override
@@ -97,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //NAVIGATION DRAWER
-
     @Override
     public void onBackPressed() {
         // Handle back click to close menu
@@ -128,21 +128,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabs.getTabAt(2).select();
         switch (item.getItemId()){
             case R.id.activity_main_drawer_arts:
+                SharedPreferencesUtility.putString(this,"WEEKLY_SECTION_NAME","arts");
                 tabs.getTabAt(2).setText("ARTS");
                 break;
             case R.id.activity_main_drawer_business:
+                SharedPreferencesUtility.putString(this,"WEEKLY_SECTION_NAME","business");
                 tabs.getTabAt(2).setText("BUSINESS");
                 break;
             case R.id.activity_main_drawer_entrepreneurs:
+                SharedPreferencesUtility.putString(this,"WEEKLY_SECTION_NAME","entrepreneurs");
                 tabs.getTabAt(2).setText("ENTREPRENEURS");
                 break;
             case R.id.activity_main_drawer_politics:
+                SharedPreferencesUtility.putString(this,"WEEKLY_SECTION_NAME","politics");
                 tabs.getTabAt(2).setText("POLITICS");
                 break;
             case R.id.activity_main_drawer_sports:
+                SharedPreferencesUtility.putString(this,"WEEKLY_SECTION_NAME","sports");
                 tabs.getTabAt(2).setText("SPORTS");
                 break;
             case R.id.activity_main_drawer_travel:
+                SharedPreferencesUtility.putString(this,"WEEKLY_SECTION_NAME","travel");
                 tabs.getTabAt(2).setText("TRAVEL");
                 break;
             default:

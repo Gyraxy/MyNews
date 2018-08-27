@@ -8,11 +8,6 @@ import android.webkit.WebView;
 
 import com.duboscq.nicolas.mynews.R;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
-import java.util.Locale;
-
 /**
  * Created by Nicolas DUBOSCQ on 10/08/2018
  */
@@ -26,7 +21,6 @@ public class ArticleWebViewActivity extends AppCompatActivity {
         WebView webview = findViewById(R.id.activity_article_wbview);
         String article_url=this.getIntent().getExtras().getString("article_url");
         webview.loadUrl(article_url);
-
     }
 
     private void configureSearchToolbar(){

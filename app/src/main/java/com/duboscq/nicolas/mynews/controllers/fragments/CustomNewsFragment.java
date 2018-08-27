@@ -17,9 +17,9 @@ import com.duboscq.nicolas.mynews.controllers.activities.ArticleWebViewActivity;
 import com.duboscq.nicolas.mynews.models.Docs;
 import com.duboscq.nicolas.mynews.models.GeneralInfo;
 import com.duboscq.nicolas.mynews.utils.APIInterface;
-import com.duboscq.nicolas.mynews.utils.DateUtility;
 import com.duboscq.nicolas.mynews.utils.ItemClickSupport;
 import com.duboscq.nicolas.mynews.utils.RetrofitUtility;
+import com.duboscq.nicolas.mynews.utils.SharedPreferencesUtility;
 
 import java.util.List;
 
@@ -56,13 +56,14 @@ public class CustomNewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_articles, container, false);
         ButterKnife.bind(this, view);
-        Bundle args = getArguments();
-        if (args!=null) {
-            String value = args.getString("SECTION_CUSTOM");
-            System.out.println("test"+value);
+        section_custom = SharedPreferencesUtility.getString(getContext(),"WEEKLY_SECTION_NAME");
+        if (section_custom != null){
+            configureAndShowDocs();
+            configureSwipeRefreshLayout();
         }
         return view;
     }
+
     private void configureSwipeRefreshLayout(){
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -73,7 +74,7 @@ public class CustomNewsFragment extends Fragment {
     }
 
     private void configureRecyclerView (){
-        adapter = new DocsRecyclerViewAdapter(getContext(),docs, Glide.with(this));
+        adapter = new DocsRecyclerViewAdapter(docs, Glide.with(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
@@ -89,9 +90,10 @@ public class CustomNewsFragment extends Fragment {
                     }
                 });
     }
-    private void configureAndShowDocs (){
+
+    public void configureAndShowDocs(){
         APIInterface apiInterface = RetrofitUtility.getInstance().create(APIInterface.class);
-        Call<GeneralInfo> call = apiInterface.getWeekly(section_custom);
+        Call<GeneralInfo> call = apiInterface.getWeekly("section_name:(\""+section_custom+"\")");
         call.enqueue(new Callback<GeneralInfo>() {
             @Override
             public void onResponse(Call<GeneralInfo> call, Response<GeneralInfo> response) {

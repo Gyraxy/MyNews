@@ -71,7 +71,7 @@ public class TopStoriesFragment extends Fragment {
     }
 
     private void configureRecyclerView (){
-        adapter = new ArticleRecyclerViewAdapter(getContext(),article_top_stories_list, Glide.with(this));
+        adapter = new ArticleRecyclerViewAdapter(article_top_stories_list, Glide.with(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }

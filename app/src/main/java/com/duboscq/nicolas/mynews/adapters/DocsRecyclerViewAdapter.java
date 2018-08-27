@@ -1,6 +1,5 @@
 package com.duboscq.nicolas.mynews.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +20,9 @@ public class DocsRecyclerViewAdapter extends RecyclerView.Adapter<DocsViewHolder
     private List<Docs> docs;
     private RequestManager glide;
 
-    public DocsRecyclerViewAdapter(Context mContext,List<Docs> docs,RequestManager glide) {
+    public DocsRecyclerViewAdapter(List<Docs> docs, RequestManager glide) {
         this.docs = docs;
-        Context context = mContext;
-        this.glide=glide;
+        this.glide = glide;
     }
 
     @Override
@@ -34,7 +32,6 @@ public class DocsRecyclerViewAdapter extends RecyclerView.Adapter<DocsViewHolder
         return new DocsViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(DocsViewHolder DocsViewHolder,int position) {
         DocsViewHolder.updateDocsinfo(this.docs.get(position), this.glide);
@@ -43,9 +40,5 @@ public class DocsRecyclerViewAdapter extends RecyclerView.Adapter<DocsViewHolder
     @Override
     public int getItemCount() {
         return docs.size();
-    }
-
-    public Docs getInfo(int position){
-        return this.docs.get(position);
     }
 }
