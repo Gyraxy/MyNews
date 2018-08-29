@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +22,18 @@ import com.duboscq.nicolas.mynews.controllers.activities.ArticleWebViewActivity;
 import com.duboscq.nicolas.mynews.models.Docs;
 import com.duboscq.nicolas.mynews.models.GeneralInfo;
 import com.duboscq.nicolas.mynews.utils.APIInterface;
+import com.duboscq.nicolas.mynews.utils.APIStreams;
 import com.duboscq.nicolas.mynews.utils.ItemClickSupport;
 import com.duboscq.nicolas.mynews.utils.RetrofitUtility;
+import com.duboscq.nicolas.mynews.utils.SharedPreferencesUtility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,8 +51,9 @@ public class SearchNewsFragment extends Fragment {
     DocsRecyclerViewAdapter adapter;
     String begin_date;
     String end_date;
-    String section;
+    String search_section;
     String search_query;
+    private Disposable disposable;
 
     public SearchNewsFragment(){ }
 
@@ -58,10 +65,12 @@ public class SearchNewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_articles, container, false);
         ButterKnife.bind(this, view);
-        getSearchInfo();
-        if (section!=null) {
-            configureAndShowDocs();
+        search_section= SharedPreferencesUtility.getString(getContext(),"SEARCH_SECTION");
+        if (search_section != null){
+            configureRecyclerView();
+            configureAndShowArticleHTTP();
             configureSwipeRefreshLayout();
+            configureOnClickRecyclerView();
         }
         return view;
     }
@@ -70,15 +79,16 @@ public class SearchNewsFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                configureAndShowDocs();
+                configureAndShowArticleHTTP();
             }
         });
     }
 
     private void configureRecyclerView (){
-        adapter = new DocsRecyclerViewAdapter(docs, Glide.with(this));
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        this.docs = new ArrayList<>();
+        this.adapter = new DocsRecyclerViewAdapter(this.docs,Glide.with(this));
+        this.recyclerView.setAdapter(this.adapter);
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     private void configureOnClickRecyclerView(){
@@ -93,24 +103,38 @@ public class SearchNewsFragment extends Fragment {
                 });
     }
 
-    private void configureAndShowDocs (){
-        APIInterface apiInterface = RetrofitUtility.getInstance().create(APIInterface.class);
-        Call<GeneralInfo> call = apiInterface.getSearch(search_query,section,begin_date,end_date);
-        call.enqueue(new Callback<GeneralInfo>() {
+    private void configureAndShowArticleHTTP() {
+        getSavedSearchParameters();
+        disposable = APIStreams.getSearchDocs("\""+search_query+"\""+" AND section_name.contains:(\""+search_section+"\")",begin_date,end_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
-            public void onResponse(Call<GeneralInfo> call, Response<GeneralInfo> response) {
-                docs = response.body().getResponse().getDocs();
-                configureRecyclerView();
-                configureOnClickRecyclerView();
-                swipeRefreshLayout.setRefreshing(false);
+            public void onNext(GeneralInfo generalInfo) {
+                Log.e("TAG", "On Next");
+                updateArticles(generalInfo);
             }
 
             @Override
-            public void onFailure(Call<GeneralInfo> call, Throwable t) {
+            public void onError(Throwable e) {
+                Log.e("TAG", "On Error" + Log.getStackTraceString(e));
+            }
+
+            @Override
+            public void onComplete() {
+                Log.e("TAG", "On Complete !!");
             }
         });
     }
 
-    private void getSearchInfo(){
+    private void updateArticles(GeneralInfo generalInfo){
+        swipeRefreshLayout.setRefreshing(false);
+        docs.clear();
+        docs.addAll(generalInfo.getResponse().getDocs());
+        adapter.notifyDataSetChanged();
+    }
+
+    private void getSavedSearchParameters(){
+        search_section= SharedPreferencesUtility.getString(getContext(),"SEARCH_SECTION");
+        begin_date = SharedPreferencesUtility.getString(getContext(),"SEARCH_BEGIN_DATE");
+        end_date = SharedPreferencesUtility.getString(getContext(),"SEARCH_END_DATE");
+        search_query = SharedPreferencesUtility.getString(getContext(),"SEARCH_QUERY");
     }
 }

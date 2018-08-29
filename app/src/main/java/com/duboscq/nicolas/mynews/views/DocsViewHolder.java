@@ -38,6 +38,7 @@ public class DocsViewHolder extends RecyclerView.ViewHolder {
         article_title_txt.setText(docs.getTypeOfMaterial());
 
         if(docs.getMultimedia().size()>0 && docs.getMultimedia().get(2) != null && docs.getMultimedia().size() > 0) {
-            glide.load("https://www.nytimes.com/"+docs.getMultimedia().get(2).getUrl()).into(article_picture_img);}
+            glide.load("https://www.nytimes.com/"+docs.getMultimedia().get(2).getUrl()).into(article_picture_img);
+        } else article_picture_img.setImageResource(R.drawable.empty_picture);
     }
 }
