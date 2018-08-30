@@ -26,4 +26,7 @@ public interface APIInterface {
                                           @Query("begin_date") String begin_date,
                                           @Query("end_date") String end_date);
 
+        @GET("search/v2/articlesearch.json?&api-key=c5ee5b8a2b004651bd6337f0f785469b")
+        Observable<GeneralInfo> getSearchWithoutDate(@Query("fq")String search_query);
+
 }

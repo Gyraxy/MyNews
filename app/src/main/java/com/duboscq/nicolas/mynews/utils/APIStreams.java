@@ -44,4 +44,12 @@ public class APIStreams {
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(10, TimeUnit.SECONDS);
     }
+
+    public static Observable<GeneralInfo> getSearchDocsWithoutDate(String query){
+        APIInterface apiInterface = RetrofitUtility.getInstance().create(APIInterface.class);
+        return apiInterface.getSearchWithoutDate(query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .timeout(10, TimeUnit.SECONDS);
+    }
 }

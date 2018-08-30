@@ -62,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_notifications:
-                Intent notification_intent = new Intent(this ,NotificationsActivity.class);
+                Intent notification_intent = new Intent(this ,SearchNotificationActivity.class);
+                notification_intent.putExtra("NOTIFICATION_SEARCH_ACTIVITY","notification");
                 startActivity(notification_intent);
                 break;
             case R.id.action_help:
@@ -75,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 about_popup_diag.show();
                 break;
             case R.id.action_search:
-                Intent search_intent = new Intent(this ,SearchActivity.class);
+                Intent search_intent = new Intent(this ,SearchNotificationActivity.class);
+                search_intent.putExtra("NOTIFICATION_SEARCH_ACTIVITY","search");
                 startActivity(search_intent);
                 break;
             default:
