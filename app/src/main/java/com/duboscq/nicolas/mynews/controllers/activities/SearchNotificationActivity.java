@@ -4,12 +4,15 @@ package com.duboscq.nicolas.mynews.controllers.activities;
  * Created by Nicolas DUBOSCQ on 30/08/2018
  */
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -19,10 +22,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -55,6 +60,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
 
     //--FOR DESIGN--
 
+    @BindView(R.id.toolbar)Toolbar toolbar;
     @BindView(R.id.activity_notification_switch) Switch notification_switch;
     @BindView(R.id.activity_notification_view) View notification_view;
 
@@ -68,7 +74,6 @@ public class SearchNotificationActivity extends AppCompatActivity{
 
     //Search Button
     @BindView(R.id.activity_search_search_button) Button search_button;
-    @BindView(R.id.activity_search_test_button) Button notification_test;
 
     //Edit Text
     @BindView(R.id.activity_search_search_edt) EditText search_query_edt;
@@ -109,6 +114,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
                 break;
             case "notification":
                 setNotificationActivityLayout();
+                getNotificationParameters();
                 break;
             default:
                 break;
@@ -142,6 +148,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
         notification_view.setVisibility(View.GONE);
     }
 
+    //FOR NOTIFICATION ACTIVITY
     private void setNotificationActivityLayout(){
         setTitle("Notifications");
         search_date_layout.setVisibility(View.GONE);
@@ -163,32 +170,47 @@ public class SearchNotificationActivity extends AppCompatActivity{
         } else if (begin_date == "" && end_date == ""){
             configureSection();
             configureAndShowArticleHTTPWithoutDate();
-            savedSearchParameters();
+            saveSearchParameters();
         } else if (begin_date != null && end_date != null){
             if (!checkBeginDateBeforeEndDate()){
                 Toast.makeText(this, "Begin date is after End Date, please modify", Toast.LENGTH_SHORT).show();
             } else {
                 configureSection();
                 configureAndShowArticleHTTP();
-                savedSearchParameters();
+                saveSearchParameters();
             }
         }
     }
 
-    @OnClick(R.id.activity_search_test_button)
-    public void createNotification() {
-        addNotification();
-    }
-
-    // -----------------------------
-    // SEARCHACTIVITY DESIGN TOOLBAR
-    // -----------------------------
+    // ---------------------
+    // TOOLBAR CONFIGURATION
+    // ---------------------
 
     private void configureSearchToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent notification_intent = new Intent(this ,MainActivity.class);
+                switch (activity) {
+                    case "search":
+                        break;
+                    case "notification":
+                        saveNotificationParameters();
+                        break;
+                    default:
+                        break;
+                }
+                startActivity(notification_intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     // ---------------------------------------------
@@ -360,10 +382,9 @@ public class SearchNotificationActivity extends AppCompatActivity{
             end_date = DateUtility.convertingSearchDate(search_end_date_edt.getText().toString());
         } else end_date = null;
         search_query = search_query_edt.getText().toString();
-        Log.e("TAG",search_query+begin_date+end_date);
     }
 
-    private void savedSearchParameters(){
+    private void saveSearchParameters(){
         SharedPreferencesUtility.putString(this,"SEARCH_SECTION",section);
         SharedPreferencesUtility.putString(this,"SEARCH_BEGIN_DATE",begin_date);
         SharedPreferencesUtility.putString(this,"SEARCH_END_DATE",end_date);
@@ -388,5 +409,89 @@ public class SearchNotificationActivity extends AppCompatActivity{
                 .setContentText("Yeah");
 
         notificationManager.notify(ID_NOTIFICATION, builder.build());
+    }
+
+    private void saveNotificationParameters(){
+        if (arts_chb.isChecked()){
+            SharedPreferencesUtility.putInt(this,"ARTS_CHB",1);
+        } else {SharedPreferencesUtility.putInt(this,"ARTS_CHB",0);}
+
+        if (business_chb.isChecked()){
+            SharedPreferencesUtility.putInt(this,"BUSINESS_CHB",1);
+        } else {SharedPreferencesUtility.putInt(this,"BUSINESS_CHB",0);}
+
+        if (entrepreneurs_chb.isChecked()){
+            SharedPreferencesUtility.putInt(this,"ENTREPRENEURS_CHB",1);
+        } else {SharedPreferencesUtility.putInt(this,"ENTREPRENEURS_CHB",0);}
+
+        if (politics_chb.isChecked()){
+            SharedPreferencesUtility.putInt(this,"POLITICS_CHB",1);
+        } else {SharedPreferencesUtility.putInt(this,"POLITICS_CHB",0);}
+
+        if (sports_chb.isChecked()){
+            SharedPreferencesUtility.putInt(this,"SPORTS_CHB",1);
+        } else {SharedPreferencesUtility.putInt(this,"SPORT_CHB",0);}
+
+        if (travel_chb.isChecked()){
+            SharedPreferencesUtility.putInt(this,"TRAVEL_CHB",1);
+        } else {SharedPreferencesUtility.putInt(this,"TRAVEL_CHB",0);}
+
+        if (notification_switch.isChecked()){
+            SharedPreferencesUtility.putInt(this,"NOTIFICATION_SWITCH",1);
+        } else {SharedPreferencesUtility.putInt(this,"NOTIFICATION_SWITCH",0);}
+
+        SharedPreferencesUtility.putString(this,"NOTIFICATION_QUERY",search_query_edt.getText().toString());
+    }
+
+    private void getNotificationParameters(){
+
+        int arts_chb_st = SharedPreferencesUtility.getInt(getApplicationContext(),"ARTS_CHB",-1);
+        int business_chb_st = SharedPreferencesUtility.getInt(getApplicationContext(),"BUSINESS_CHB",-1);
+        int entrepreneurs_chb_st = SharedPreferencesUtility.getInt(getApplicationContext(),"ENTREPRENEURS_CHB",-1);
+        int politics_chb_st = SharedPreferencesUtility.getInt(getApplicationContext(),"POLITICS_CHB",-1);
+        int sports_chb_st = SharedPreferencesUtility.getInt(getApplicationContext(),"SPORTS_CHB",-1);
+        int travel_chb_st = SharedPreferencesUtility.getInt(getApplicationContext(),"TRAVEL_CHB",-1);
+        int switch_st = SharedPreferencesUtility.getInt(getApplicationContext(),"NOTIFICATION_SWITCH",-1);
+        String notification_query =SharedPreferencesUtility.getString(getApplicationContext(),"NOTIFICATION_QUERY");
+
+        Log.e("TAG",""+arts_chb_st+business_chb_st+entrepreneurs_chb_st+politics_chb_st+sports_chb_st+travel_chb_st+switch_st);
+
+        if (arts_chb_st == 1){
+            arts_chb.setChecked(true);
+        } else if (arts_chb_st == 0 || arts_chb_st == -1){
+            arts_chb.setChecked(false);
+        }
+        if (business_chb_st == 1){
+            business_chb.setChecked(true);
+        } else if (business_chb_st == 0 || business_chb_st == -1){
+            business_chb.setChecked(false);
+        }
+        if (entrepreneurs_chb_st == 1){
+            entrepreneurs_chb.setChecked(true);
+        } else if (entrepreneurs_chb_st == 0 || entrepreneurs_chb_st == -1){
+            entrepreneurs_chb.setChecked(false);
+        }
+        if (politics_chb_st == 1){
+            politics_chb.setChecked(true);
+        } else if (politics_chb_st == 0 || politics_chb_st == -1){
+            politics_chb.setChecked(false);
+        }
+        if (sports_chb_st == 1){
+            sports_chb.setChecked(true);
+        } else if (sports_chb_st == 0 || sports_chb_st == -1){
+            sports_chb.setChecked(false);
+        }
+        if (travel_chb_st == 1){
+            travel_chb.setChecked(true);
+        } else if (travel_chb_st == 0 || travel_chb_st == -1){
+            travel_chb.setChecked(false);
+        }
+        if (switch_st == 1){
+            notification_switch.setChecked(true);
+        } else if (switch_st == 0 || switch_st == -1){
+            notification_switch.setChecked(false);
+        }
+
+        search_query_edt.setText(notification_query);
     }
 }

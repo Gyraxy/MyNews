@@ -210,23 +210,4 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="16dp"
-        android:id="@+id/activity_search_test_layout">
-
-        <Button
-            android:id="@+id/activity_search_test_button"
-            android:layout_width="318dp"
-            android:layout_height="wrap_content"
-            android:text="NOTIFICATION"
-            android:theme="@style/Widget.AppCompat.Button.Colored"
-            android:textColor="@color/colorWhiteText"
-            android:background="@color/colorPrimary"/>
-
-    </LinearLayout>
-
-
 </LinearLayout>

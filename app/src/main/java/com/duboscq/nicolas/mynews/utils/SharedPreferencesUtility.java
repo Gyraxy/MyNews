@@ -21,7 +21,7 @@ public class SharedPreferencesUtility {
 
     public static String getString(Context context, String key){
         SharedPreferencesUtility.getInstance(context);
-        return INSTANCE.getString(key,"");
+        return INSTANCE.getString(key,null);
     }
 
     public static int getInt(Context context, String key, int defaultvalue){
