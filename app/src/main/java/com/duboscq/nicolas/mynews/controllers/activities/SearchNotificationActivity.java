@@ -7,6 +7,7 @@ package com.duboscq.nicolas.mynews.controllers.activities;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -52,6 +53,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
@@ -89,9 +91,6 @@ public class SearchNotificationActivity extends AppCompatActivity{
     //--FOR DATA--
     String search_query,begin_date=null,end_date,section=null,section_chbx_arts,section_chbx_business,section_chbx_entrepreneurs,section_chbx_politics,section_chbx_sports,section_chbx_travel;
     String activity;
-    public static final int ID_NOTIFICATION = 1984;
-    private String CHANNEL_ID = "my_channel_01";
-    private CharSequence name = "my_channel";
     Calendar newDate = Calendar.getInstance();
     DatePickerDialog mDatePickerDialogbegin,mDatePickerDialogend;
     List<Docs> docs;
@@ -179,6 +178,17 @@ public class SearchNotificationActivity extends AppCompatActivity{
                 configureAndShowArticleHTTP();
                 saveSearchParameters();
             }
+        }
+    }
+
+    @OnCheckedChanged(R.id.activity_notification_switch)
+    public void switchChanged(CompoundButton button,boolean checked){
+        if (checked){
+            Log.e("TAG","Switch checked");
+            scheduleNotification();
+        } else if (!checked){
+            Log.e("TAG","Switch unchecked");
+            cancelNotification();
         }
     }
 
@@ -391,26 +401,6 @@ public class SearchNotificationActivity extends AppCompatActivity{
         SharedPreferencesUtility.putString(this,"SEARCH_QUERY",search_query);
     }
 
-    private void addNotification() {
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
-            mChannel.setDescription("Test");
-            notificationManager.createNotificationChannel(mChannel);
-        }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext(), CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_arrow_drop_down_black_24)
-                .setContentTitle("Notifications")
-                .setContentText("Yeah");
-
-        notificationManager.notify(ID_NOTIFICATION, builder.build());
-    }
-
     private void saveNotificationParameters(){
         if (arts_chb.isChecked()){
             SharedPreferencesUtility.putInt(this,"ARTS_CHB",1);
@@ -493,5 +483,30 @@ public class SearchNotificationActivity extends AppCompatActivity{
         }
 
         search_query_edt.setText(notification_query);
+    }
+
+
+    // ----------------------------------
+    // ALARM MANAGER TO SET NOTIFICATIONS
+    // ----------------------------------
+
+    //Notifications scheduled
+    private void scheduleNotification() {
+
+        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long triggerAtMillis = SystemClock.elapsedRealtime() + 5000;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,triggerAtMillis,5000,pendingIntent);
+    }
+
+    //Notifications canceled
+    private void cancelNotification() {
+        Intent intent = new Intent(this, NotificationPublisher.class);
+        PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        alarmManager.cancel(sender);
     }
 }

@@ -1,17 +1,17 @@
 package com.duboscq.nicolas.mynews.controllers.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,14 +20,10 @@ import android.view.View;
 import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.adapters.ViewPagerAdapter;
 import com.duboscq.nicolas.mynews.controllers.fragments.CustomNewsFragment;
-import com.duboscq.nicolas.mynews.models.GeneralInfo;
-import com.duboscq.nicolas.mynews.utils.APIStreams;
 import com.duboscq.nicolas.mynews.utils.SharedPreferencesUtility;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -161,6 +157,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             default:
                 break;
         }
+        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.activity_main_viewpager + ":" + pager.getCurrentItem());
+        ((CustomNewsFragment)page).configureAndShowArticleHTTP();
         this.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

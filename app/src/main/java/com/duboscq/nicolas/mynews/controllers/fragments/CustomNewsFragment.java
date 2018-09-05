@@ -102,7 +102,7 @@ public class CustomNewsFragment extends Fragment {
                 });
     }
 
-    private void configureAndShowArticleHTTP() {
+    public void configureAndShowArticleHTTP() {
         section_custom = SharedPreferencesUtility.getString(getContext(),"WEEKLY_SECTION_NAME");
         disposable = APIStreams.getWeeklyArticles("section_name:(\""+section_custom+"\")").subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override

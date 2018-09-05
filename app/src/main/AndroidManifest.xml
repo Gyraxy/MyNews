@@ -35,6 +35,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.duboscq.nicolas.mynews.controllers.activities.MainActivity" />
         </activity>
+
+        <receiver android:name="com.duboscq.nicolas.mynews.controllers.activities.NotificationPublisher" />
     </application>
 
 </manifest>
