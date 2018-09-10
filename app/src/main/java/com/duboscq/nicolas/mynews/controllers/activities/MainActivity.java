@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //VIEWPAGER CONFIGURATION AND TABS
     private void configureViewPagerAndTabs(){
-        pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
+        pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(),getApplicationContext()));
         int tabToOpen = getIntent().getIntExtra("TABS", -1);
         if (tabToOpen!=-1) {
             pager.setCurrentItem(3);

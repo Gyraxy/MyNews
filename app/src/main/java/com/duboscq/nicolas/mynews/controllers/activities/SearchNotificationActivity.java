@@ -7,18 +7,13 @@ package com.duboscq.nicolas.mynews.controllers.activities;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
-import android.support.v4.app.NotificationCompat;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -184,8 +179,21 @@ public class SearchNotificationActivity extends AppCompatActivity{
     @OnCheckedChanged(R.id.activity_notification_switch)
     public void switchChanged(CompoundButton button,boolean checked){
         if (checked){
-            Log.e("TAG","Switch checked");
-            scheduleNotification();
+            if (!arts_chb.isChecked()
+                    && !business_chb.isChecked()
+                    && !entrepreneurs_chb.isChecked()
+                    && !politics_chb.isChecked()
+                    && !sports_chb.isChecked()
+                    && !travel_chb.isChecked()){
+                Log.e("TAG","No Notification category selected");
+                Toast.makeText(this, "Please select at least one category", Toast.LENGTH_SHORT).show();
+                notification_switch.setChecked(false);
+            }
+            else {
+                saveNotificationParameters();
+                Log.e("TAG","Switch checked");
+                scheduleNotification();
+            }
         } else if (!checked){
             Log.e("TAG","Switch unchecked");
             cancelNotification();
@@ -444,8 +452,6 @@ public class SearchNotificationActivity extends AppCompatActivity{
         int switch_st = SharedPreferencesUtility.getInt(getApplicationContext(),"NOTIFICATION_SWITCH",-1);
         String notification_query =SharedPreferencesUtility.getString(getApplicationContext(),"NOTIFICATION_QUERY");
 
-        Log.e("TAG",""+arts_chb_st+business_chb_st+entrepreneurs_chb_st+politics_chb_st+sports_chb_st+travel_chb_st+switch_st);
-
         if (arts_chb_st == 1){
             arts_chb.setChecked(true);
         } else if (arts_chb_st == 0 || arts_chb_st == -1){
@@ -496,9 +502,13 @@ public class SearchNotificationActivity extends AppCompatActivity{
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long triggerAtMillis = SystemClock.elapsedRealtime() + 5000;
+        Calendar calendar_notification = Calendar.getInstance();
+        calendar_notification.setTimeInMillis(System.currentTimeMillis());
+        calendar_notification.set(Calendar.HOUR_OF_DAY, 7);
+        calendar_notification.set(Calendar.MINUTE, 0);
+
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,triggerAtMillis,5000,pendingIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar_notification.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
     }
 
     //Notifications canceled
