@@ -21,10 +21,8 @@ import com.duboscq.nicolas.mynews.adapters.DocsRecyclerViewAdapter;
 import com.duboscq.nicolas.mynews.controllers.activities.ArticleWebViewActivity;
 import com.duboscq.nicolas.mynews.models.Docs;
 import com.duboscq.nicolas.mynews.models.GeneralInfo;
-import com.duboscq.nicolas.mynews.utils.APIInterface;
 import com.duboscq.nicolas.mynews.utils.APIStreams;
 import com.duboscq.nicolas.mynews.utils.ItemClickSupport;
-import com.duboscq.nicolas.mynews.utils.RetrofitUtility;
 import com.duboscq.nicolas.mynews.utils.SharedPreferencesUtility;
 
 import java.util.ArrayList;
@@ -34,9 +32,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class SearchNewsFragment extends Fragment {
