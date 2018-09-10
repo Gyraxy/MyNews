@@ -52,4 +52,20 @@ public class APIStreams {
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(10, TimeUnit.SECONDS);
     }
+
+    public static Observable<GeneralInfo> getSearchDocsWithoutBeginDate(String query,String end_date){
+        APIInterface apiInterface = RetrofitUtility.getInstance().create(APIInterface.class);
+        return apiInterface.getSearchWithoutBeginDate(query,end_date)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .timeout(10, TimeUnit.SECONDS);
+    }
+
+    public static Observable<GeneralInfo> getSearchDocsWithoutEndDate(String query,String begin_date){
+        APIInterface apiInterface = RetrofitUtility.getInstance().create(APIInterface.class);
+        return apiInterface.getSearchWithoutEndDate(query,begin_date)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .timeout(10, TimeUnit.SECONDS);
+    }
 }

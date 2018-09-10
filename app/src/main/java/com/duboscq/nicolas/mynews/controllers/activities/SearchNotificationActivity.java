@@ -165,7 +165,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
             configureSection();
             configureAndShowArticleHTTPWithoutDate();
             saveSearchParameters();
-        } else if (begin_date != null && end_date != null){
+        } else if (begin_date.length()>0 && end_date.length()>0){
             if (!checkBeginDateBeforeEndDate()){
                 Toast.makeText(this, "Begin date is after End Date, please modify", Toast.LENGTH_SHORT).show();
             } else {
@@ -173,6 +173,14 @@ public class SearchNotificationActivity extends AppCompatActivity{
                 configureAndShowArticleHTTP();
                 saveSearchParameters();
             }
+        } else if (begin_date.length()==0 && end_date.length()>0) {
+            configureSection();
+            configureAndShowArticleHTTPWithoutBeginDate();
+            saveSearchParameters();
+        } else if (begin_date.length()>0 && end_date.length()==0) {
+            configureSection();
+            configureAndShowArticleHTTPWithoutEndDate();
+            saveSearchParameters();
         }
     }
 
@@ -337,6 +345,46 @@ public class SearchNotificationActivity extends AppCompatActivity{
             @Override
             public void onComplete() {
                 Log.e("TAG", "SearchActivity : On Complete HTTP Request without date !!");
+            }
+        });
+    }
+
+    private void configureAndShowArticleHTTPWithoutBeginDate(){
+        disposable = APIStreams.getSearchDocsWithoutBeginDate("\""+search_query+"\""+" AND section_name.contains:("+section+")",end_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
+            @Override
+            public void onNext(GeneralInfo generalInfo) {
+                Log.e("TAG", "SearchActivity : On Next HTTP Request without Begin date");
+                updateArticles(generalInfo);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("TAG", "SearchActivity : On Error" + Log.getStackTraceString(e));
+            }
+
+            @Override
+            public void onComplete() {
+                Log.e("TAG", "SearchActivity : On Complete HTTP Request without Begin date");
+            }
+        });
+    }
+
+    private void configureAndShowArticleHTTPWithoutEndDate(){
+        disposable = APIStreams.getSearchDocsWithoutEndDate("\""+search_query+"\""+" AND section_name.contains:("+section+")",begin_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
+            @Override
+            public void onNext(GeneralInfo generalInfo) {
+                Log.e("TAG", "SearchActivity : On Next HTTP Request without End date");
+                updateArticles(generalInfo);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("TAG", "SearchActivity : On Error" + Log.getStackTraceString(e));
+            }
+
+            @Override
+            public void onComplete() {
+                Log.e("TAG", "SearchActivity : On Complete HTTP Request without End date");
             }
         });
     }
