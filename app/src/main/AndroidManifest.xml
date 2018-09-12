@@ -26,7 +26,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.duboscq.nicolas.mynews.controllers.activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".controllers.activities.ArticleWebViewActivity"
             android:label="Article"
@@ -36,7 +35,17 @@
                 android:value="com.duboscq.nicolas.mynews.controllers.activities.MainActivity" />
         </activity>
 
-        <receiver android:name="com.duboscq.nicolas.mynews.controllers.activities.NotificationPublisher" />
+        <activity
+            android:name=".controllers.activities.NotificationResultsActivity"
+            android:label="Notification Results"
+            android:parentActivityName=".controllers.activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.duboscq.nicolas.mynews.controllers.activities.MainActivity" />
+        </activity>
+
+        <receiver android:name=".controllers.activities.NotificationPublisher" />
+
     </application>
 
 </manifest>

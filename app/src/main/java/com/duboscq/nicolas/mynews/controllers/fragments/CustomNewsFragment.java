@@ -125,7 +125,9 @@ public class CustomNewsFragment extends Fragment {
 
     private void updateArticles(GeneralInfo generalInfo){
         swipeRefreshLayout.setRefreshing(false);
-        docs.clear();
+        if (!docs.isEmpty()){
+            docs.clear();
+        }
         docs.addAll(generalInfo.getResponse().getDocs());
         adapter.notifyDataSetChanged();
     }

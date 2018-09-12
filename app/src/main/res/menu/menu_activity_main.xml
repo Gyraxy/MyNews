@@ -5,24 +5,35 @@
     tools:context="com.duboscq.nicolas.mynews.MainActivity">
 
     <item
+        android:id="@+id/action_notifications_results"
+        android:icon="@drawable/ic_notification_24"
+        android:title="@string/notifications_results"
+        app:showAsAction="always" />
+
+
+    <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_icon_24"
         android:title="@string/search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
+
 
     <item
         android:id="@+id/action_notifications"
         android:orderInCategory="100"
-        android:title="@string/notifications" />
+        android:title="@string/notifications"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_help"
         android:orderInCategory="100"
-        android:title="@string/help"/>
+        android:title="@string/help"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_about"
         android:orderInCategory="100"
-        android:title="@string/about"/>
+        android:title="@string/about"
+        app:showAsAction="never"/>
 
 </menu>

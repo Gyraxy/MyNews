@@ -119,18 +119,18 @@ public class SearchNewsFragment extends Fragment {
         disposable = APIStreams.getSearchDocs("\""+search_query+"\""+" AND section_name.contains:("+search_section+")",begin_date,end_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.e("TAG", "On Next");
+                Log.e("TAG", "Search Fragment : On Next");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG", "On Error" + Log.getStackTraceString(e));
+                Log.e("TAG", "Search Fragment : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG", "On Complete !!");
+                Log.e("TAG", "Search Fragment : On Complete !!");
             }
         });
     }
@@ -159,18 +159,18 @@ public class SearchNewsFragment extends Fragment {
         disposable = APIStreams.getSearchDocsWithoutBeginDate("\""+search_query+"\""+" AND section_name.contains:("+search_section+")",end_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.e("TAG", "SearchActivity : On Next HTTP Request without Begin date");
+                Log.e("TAG", "SearchFragment : On Next HTTP Request without Begin date");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG", "SearchActivity : On Error" + Log.getStackTraceString(e));
+                Log.e("TAG", "SearchFragment : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG", "SearchActivity : On Complete HTTP Request without Begin date");
+                Log.e("TAG", "SearchFragment : On Complete HTTP Request without Begin date");
             }
         });
     }
@@ -179,18 +179,18 @@ public class SearchNewsFragment extends Fragment {
         disposable = APIStreams.getSearchDocsWithoutEndDate("\""+search_query+"\""+" AND section_name.contains:("+search_section+")",begin_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.e("TAG", "SearchActivity : On Next HTTP Request without End date");
+                Log.e("TAG", "SearchFragment : On Next HTTP Request without End date");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG", "SearchActivity : On Error" + Log.getStackTraceString(e));
+                Log.e("TAG", "SearchFragment : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG", "SearchActivity : On Complete HTTP Request without End date");
+                Log.e("TAG", "SearchFragment : On Complete HTTP Request without End date");
             }
         });
     }

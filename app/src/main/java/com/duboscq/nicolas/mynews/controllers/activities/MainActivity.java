@@ -57,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.action_notifications_results:
+                Intent notification_results_intent = new Intent(this ,NotificationResultsActivity.class);
+                startActivity(notification_results_intent);
+                break;
             case R.id.action_notifications:
                 Intent notification_intent = new Intent(this ,SearchNotificationActivity.class);
                 notification_intent.putExtra("NOTIFICATION_SEARCH_ACTIVITY","notification");

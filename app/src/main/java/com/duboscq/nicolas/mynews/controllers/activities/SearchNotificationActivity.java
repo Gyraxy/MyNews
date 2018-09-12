@@ -84,7 +84,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
 
 
     //--FOR DATA--
-    String search_query,begin_date=null,end_date,section=null,section_chbx_arts,section_chbx_business,section_chbx_entrepreneurs,section_chbx_politics,section_chbx_sports,section_chbx_travel;
+    String search_query,begin_date=null,end_date,search_section=null,notification_section=null,section_chbx_arts,section_chbx_business,section_chbx_entrepreneurs,section_chbx_politics,section_chbx_sports,section_chbx_travel;
     String activity;
     Calendar newDate = Calendar.getInstance();
     DatePickerDialog mDatePickerDialogbegin,mDatePickerDialogend;
@@ -166,7 +166,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
             configureAndShowArticleHTTPWithoutDate();
             saveSearchParameters();
         } else if (begin_date.length()>0 && end_date.length()>0){
-            if (!checkBeginDateBeforeEndDate()){
+            if (checkBeginDateBeforeEndDate()){
                 Toast.makeText(this, "Begin date is after End Date, please modify", Toast.LENGTH_SHORT).show();
             } else {
                 configureSection();
@@ -198,13 +198,16 @@ public class SearchNotificationActivity extends AppCompatActivity{
                 notification_switch.setChecked(false);
             }
             else {
+                configureSection();
                 saveNotificationParameters();
                 Log.e("TAG","Switch checked");
-                scheduleNotification();
+                scheduleDailyNotification();
+                Toast.makeText(SearchNotificationActivity.this, "Notification scheduled", Toast.LENGTH_LONG).show();
             }
         } else if (!checked){
             Log.e("TAG","Switch unchecked");
-            cancelNotification();
+            cancelDailyNotification();
+            Toast.makeText(SearchNotificationActivity.this, "Notification stopped", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -227,6 +230,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
                     case "search":
                         break;
                     case "notification":
+                        configureSection();
                         saveNotificationParameters();
                         break;
                     default:
@@ -305,12 +309,24 @@ public class SearchNotificationActivity extends AppCompatActivity{
 
     }
 
+    // METHOD TO CHECK BEGINDATE IS AFTER ENDDATE
+
+    private boolean checkBeginDateBeforeEndDate(){
+        Date begin_date_edt_date = DateUtility.convertingSearchStringDate(search_begin_date_edt.getText().toString());
+        Date end_date_edt_date = DateUtility.convertingSearchStringDate(search_end_date_edt.getText().toString());
+
+        if (begin_date_edt_date.after(end_date_edt_date)){
+            return true;
+        }
+        return false;
+    }
+
     // ---------------------------------------------------------
     // API CALL AND SHOW RECYCLERVIEW IF RESULTS OR POPUP IF NOT
     // ---------------------------------------------------------
 
     private void configureAndShowArticleHTTP(){
-        disposable = APIStreams.getSearchDocs("\""+search_query+"\""+" AND section_name.contains:("+section+")",begin_date,end_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
+        disposable = APIStreams.getSearchDocs("\""+search_query+"\""+" AND section_name.contains:("+search_section+")",begin_date,end_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
                 Log.e("TAG", "SearchActivity : On Next");
@@ -330,7 +346,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
     }
 
     private void configureAndShowArticleHTTPWithoutDate(){
-        disposable = APIStreams.getSearchDocsWithoutDate("\""+search_query+"\""+" AND section_name.contains:("+section+")").subscribeWith(new DisposableObserver<GeneralInfo>() {
+        disposable = APIStreams.getSearchDocsWithoutDate("\""+search_query+"\""+" AND section_name.contains:("+search_section+")").subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
                 Log.e("TAG", "SearchActivity : On Next HTTP Request without date");
@@ -350,7 +366,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
     }
 
     private void configureAndShowArticleHTTPWithoutBeginDate(){
-        disposable = APIStreams.getSearchDocsWithoutBeginDate("\""+search_query+"\""+" AND section_name.contains:("+section+")",end_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
+        disposable = APIStreams.getSearchDocsWithoutBeginDate("\""+search_query+"\""+" AND section_name.contains:("+search_section+")",end_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
                 Log.e("TAG", "SearchActivity : On Next HTTP Request without Begin date");
@@ -370,7 +386,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
     }
 
     private void configureAndShowArticleHTTPWithoutEndDate(){
-        disposable = APIStreams.getSearchDocsWithoutEndDate("\""+search_query+"\""+" AND section_name.contains:("+section+")",begin_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
+        disposable = APIStreams.getSearchDocsWithoutEndDate("\""+search_query+"\""+" AND section_name.contains:("+search_section+")",begin_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
                 Log.e("TAG", "SearchActivity : On Next HTTP Request without End date");
@@ -398,14 +414,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
         no_results_popup.show();
     }
 
-    private boolean checkBeginDateBeforeEndDate(){
-        int begin_date_edt = Integer.parseInt(DateUtility.convertingSearchDate(search_begin_date_edt.getText().toString()));
-        int end_date_edt = Integer.parseInt(DateUtility.convertingSearchDate(search_end_date_edt.getText().toString()));
-        if (begin_date_edt < end_date_edt){
-            return true;
-        }
-        return false;
-    }
+    //UPDATE RECYCLERVIEW ADAPTER WITH ARTICLES FOUND
 
     private void updateArticles(GeneralInfo generalInfo) {
         docs = generalInfo.getResponse().getDocs();
@@ -419,6 +428,16 @@ public class SearchNotificationActivity extends AppCompatActivity{
     }
 
     private void configureSection() {
+
+        //Initialization of String
+        section_chbx_arts=null;
+        section_chbx_business=null;
+        section_chbx_entrepreneurs=null;
+        section_chbx_politics=null;
+        section_chbx_sports=null;
+        section_chbx_travel=null;
+
+        //Check if checkboxes are "checked" and if this is the case
         if (arts_chb.isChecked()) {
             section_chbx_arts = "arts";
         }
@@ -437,7 +456,19 @@ public class SearchNotificationActivity extends AppCompatActivity{
         if (travel_chb.isChecked()) {
             section_chbx_travel = "travel";
         }
-        section = "\""+section_chbx_arts+"\""+"\""+section_chbx_business+"\""+"\""+section_chbx_entrepreneurs+"\""+"\""+section_chbx_politics+"\""+"\""+section_chbx_sports+"\""+"\""+section_chbx_travel+"\"";
+
+        //Configure the section name for search or notification activity depending of current activity
+
+        switch (activity) {
+            case "search":
+                search_section = "\""+section_chbx_arts+"\""+"\""+section_chbx_business+"\""+"\""+section_chbx_entrepreneurs+"\""+"\""+section_chbx_politics+"\""+"\""+section_chbx_sports+"\""+"\""+section_chbx_travel+"\"";
+                break;
+            case "notification":
+                notification_section = "\""+section_chbx_arts+"\""+"\""+section_chbx_business+"\""+"\""+section_chbx_entrepreneurs+"\""+"\""+section_chbx_politics+"\""+"\""+section_chbx_sports+"\""+"\""+section_chbx_travel+"\"";
+                break;
+            default:
+                break;
+        }
     }
 
     private void getSearchParameters(){
@@ -445,48 +476,16 @@ public class SearchNotificationActivity extends AppCompatActivity{
             begin_date = DateUtility.convertingSearchDate(search_begin_date_edt.getText().toString());
         } else begin_date = null;
         if (search_end_date_edt.getText() != null){
-            end_date = DateUtility.convertingSearchDate(search_end_date_edt.getText().toString());
+            end_date = String.valueOf(Integer.parseInt(DateUtility.convertingSearchDate(search_end_date_edt.getText().toString()))+1);
         } else end_date = null;
         search_query = search_query_edt.getText().toString();
     }
 
     private void saveSearchParameters(){
-        SharedPreferencesUtility.putString(this,"SEARCH_SECTION",section);
+        SharedPreferencesUtility.putString(this,"SEARCH_SECTION",search_section);
         SharedPreferencesUtility.putString(this,"SEARCH_BEGIN_DATE",begin_date);
         SharedPreferencesUtility.putString(this,"SEARCH_END_DATE",end_date);
         SharedPreferencesUtility.putString(this,"SEARCH_QUERY",search_query);
-    }
-
-    private void saveNotificationParameters(){
-        if (arts_chb.isChecked()){
-            SharedPreferencesUtility.putInt(this,"ARTS_CHB",1);
-        } else {SharedPreferencesUtility.putInt(this,"ARTS_CHB",0);}
-
-        if (business_chb.isChecked()){
-            SharedPreferencesUtility.putInt(this,"BUSINESS_CHB",1);
-        } else {SharedPreferencesUtility.putInt(this,"BUSINESS_CHB",0);}
-
-        if (entrepreneurs_chb.isChecked()){
-            SharedPreferencesUtility.putInt(this,"ENTREPRENEURS_CHB",1);
-        } else {SharedPreferencesUtility.putInt(this,"ENTREPRENEURS_CHB",0);}
-
-        if (politics_chb.isChecked()){
-            SharedPreferencesUtility.putInt(this,"POLITICS_CHB",1);
-        } else {SharedPreferencesUtility.putInt(this,"POLITICS_CHB",0);}
-
-        if (sports_chb.isChecked()){
-            SharedPreferencesUtility.putInt(this,"SPORTS_CHB",1);
-        } else {SharedPreferencesUtility.putInt(this,"SPORT_CHB",0);}
-
-        if (travel_chb.isChecked()){
-            SharedPreferencesUtility.putInt(this,"TRAVEL_CHB",1);
-        } else {SharedPreferencesUtility.putInt(this,"TRAVEL_CHB",0);}
-
-        if (notification_switch.isChecked()){
-            SharedPreferencesUtility.putInt(this,"NOTIFICATION_SWITCH",1);
-        } else {SharedPreferencesUtility.putInt(this,"NOTIFICATION_SWITCH",0);}
-
-        SharedPreferencesUtility.putString(this,"NOTIFICATION_QUERY",search_query_edt.getText().toString());
     }
 
     private void getNotificationParameters(){
@@ -539,28 +538,64 @@ public class SearchNotificationActivity extends AppCompatActivity{
         search_query_edt.setText(notification_query);
     }
 
+    private void saveNotificationParameters(){
+        if (arts_chb.isChecked()){
+            SharedPreferencesUtility.putInt(this,"ARTS_CHB",1);
+        } else {SharedPreferencesUtility.putInt(this,"ARTS_CHB",0);}
+
+        if (business_chb.isChecked()){
+            SharedPreferencesUtility.putInt(this,"BUSINESS_CHB",1);
+        } else {SharedPreferencesUtility.putInt(this,"BUSINESS_CHB",0);}
+
+        if (entrepreneurs_chb.isChecked()){
+            SharedPreferencesUtility.putInt(this,"ENTREPRENEURS_CHB",1);
+        } else {SharedPreferencesUtility.putInt(this,"ENTREPRENEURS_CHB",0);}
+
+        if (politics_chb.isChecked()){
+            SharedPreferencesUtility.putInt(this,"POLITICS_CHB",1);
+        } else {SharedPreferencesUtility.putInt(this,"POLITICS_CHB",0);}
+
+        if (sports_chb.isChecked()){
+            SharedPreferencesUtility.putInt(this,"SPORTS_CHB",1);
+        } else {SharedPreferencesUtility.putInt(this,"SPORT_CHB",0);}
+
+        if (travel_chb.isChecked()){
+            SharedPreferencesUtility.putInt(this,"TRAVEL_CHB",1);
+        } else {SharedPreferencesUtility.putInt(this,"TRAVEL_CHB",0);}
+
+        if (notification_switch.isChecked()){
+            SharedPreferencesUtility.putInt(this,"NOTIFICATION_SWITCH",1);
+        } else {SharedPreferencesUtility.putInt(this,"NOTIFICATION_SWITCH",0);}
+
+        SharedPreferencesUtility.putString(this,"NOTIFICATION_QUERY",search_query_edt.getText().toString());
+        SharedPreferencesUtility.putString(this,"NOTIFICATION_SECTION",notification_section);
+    }
 
     // ----------------------------------
     // ALARM MANAGER TO SET NOTIFICATIONS
     // ----------------------------------
 
     //Notifications scheduled
-    private void scheduleNotification() {
+    private void scheduleDailyNotification() {
 
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar calendar_notification = Calendar.getInstance();
-        calendar_notification.setTimeInMillis(System.currentTimeMillis());
         calendar_notification.set(Calendar.HOUR_OF_DAY, 7);
         calendar_notification.set(Calendar.MINUTE, 0);
+        calendar_notification.set(Calendar.SECOND, 0);
+
+        if (calendar_notification.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar_notification.add(Calendar.DAY_OF_YEAR, 1);
+        }
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar_notification.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
     }
 
     //Notifications canceled
-    private void cancelNotification() {
+    private void cancelDailyNotification() {
         Intent intent = new Intent(this, NotificationPublisher.class);
         PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);

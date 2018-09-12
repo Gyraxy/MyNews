@@ -6,6 +6,7 @@
     <string name="help">Help</string>
     <string name="about">About</string>
     <string name="search">Search</string>
+    <string name="notifications_results">Notifications Results</string>
 
     <!-- SEARCH ACTIVITY STRINGS -->
     <string name="search_query">Search query term</string>

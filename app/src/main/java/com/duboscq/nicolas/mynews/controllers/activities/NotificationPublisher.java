@@ -2,6 +2,7 @@ package com.duboscq.nicolas.mynews.controllers.activities;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -29,8 +30,7 @@ import io.reactivex.observers.DisposableObserver;
 public class NotificationPublisher extends BroadcastReceiver {
 
     public static final int ID_NOTIFICATION = 1984;
-    String CHANNEL_ID = "my_channel_01",todayDateformat,notification_query,section_notification;
-    int arts_chb_st,business_chb_st,entrepreneurs_chb_st,politics_chb_st,sports_chb_st,travel_chb_st,switch_st;
+    String CHANNEL_ID = "my_channel_01",todayDateformat,todayDateformatplus,notification_query,notification_section;
     CharSequence name = "my_channel";
     Disposable disposable;
     List<Docs> docs;
@@ -38,9 +38,9 @@ public class NotificationPublisher extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         notification_query = SharedPreferencesUtility.getInstance(context).getString("NOTIFICATION_QUERY",null);
+        notification_section = SharedPreferencesUtility.getInstance(context).getString("NOTIFICATION_SECTION",null);
         Log.e("TAG","Notification Query"+notification_query);
-        getNotificationSection(context);
-        Log.e("TAG","Notification Section"+section_notification);
+        Log.e("TAG","Notification Section"+notification_section);
         getTodayDate();
         getAPIDocs(context);
     }
@@ -48,6 +48,9 @@ public class NotificationPublisher extends BroadcastReceiver {
     private void addNotification(Context context){
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Intent intent = new Intent(context, NotificationResultsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
@@ -60,14 +63,17 @@ public class NotificationPublisher extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context.getApplicationContext(), CHANNEL_ID)
                 .setContentTitle("Notifications")
                 .setContentText("We have found "+docs.size()+" new articles")
-                .setSmallIcon(R.drawable.ic_news);
+                .setSmallIcon(R.drawable.ic_news)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
 
         notificationManager.notify(ID_NOTIFICATION, builder.build());
     }
 
     private void getAPIDocs(final Context context){
 
-        disposable = APIStreams.getSearchDocs("\""+notification_query+"\""+" AND section_name.contains:("+section_notification+")",todayDateformat,todayDateformat).subscribeWith(new DisposableObserver<GeneralInfo>() {
+        disposable = APIStreams.getSearchDocs("\""+notification_query+"\""+" AND section_name.contains:("+notification_section+")",todayDateformat,todayDateformatplus).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
                 Log.e("TAG", "Notification : Stream on Next");
@@ -87,43 +93,11 @@ public class NotificationPublisher extends BroadcastReceiver {
         });
     }
 
-    private void getNotificationSection (Context context){
-        String section_arts = "",
-                section_business = "",
-                section_entrepreneurs = "",
-                section_politics = "",
-                section_sports = "",
-                section_travel = "";
-        arts_chb_st = SharedPreferencesUtility.getInt(context,"ARTS_CHB",-1);
-        business_chb_st = SharedPreferencesUtility.getInt(context,"BUSINESS_CHB",-1);
-        entrepreneurs_chb_st = SharedPreferencesUtility.getInt(context,"ENTREPRENEURS_CHB",-1);
-        politics_chb_st = SharedPreferencesUtility.getInt(context,"POLITICS_CHB",-1);
-        sports_chb_st = SharedPreferencesUtility.getInt(context,"SPORTS_CHB",-1);
-        travel_chb_st = SharedPreferencesUtility.getInt(context,"TRAVEL_CHB",-1);
-        switch_st = SharedPreferencesUtility.getInt(context,"NOTIFICATION_SWITCH",-1);
-
-        if (arts_chb_st == 1){
-            section_arts = "arts";
-        }
-        if (business_chb_st ==1 ){
-            section_business = "business";
-        }
-        if (entrepreneurs_chb_st == 1){
-            section_entrepreneurs = "entrepreneurs";
-        }
-        if (politics_chb_st == 1){
-            section_politics = "politics";
-        }
-        if (travel_chb_st == 1){
-            section_travel = "travel";
-        }
-        section_notification = "\""+section_arts+"\""+"\""+section_business+"\""+"\""+section_entrepreneurs+"\""+"\""+section_politics+"\""+"\""+section_sports+"\""+"\""+section_travel+"\"";
-    }
-
     private void getTodayDate(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.FRANCE);
         Date date = new Date();
         todayDateformat = (dateFormat.format(date));
+        todayDateformatplus = String.valueOf(Integer.parseInt(todayDateformat)+1);
         Log.e("TAG",todayDateformat);
     }
 }
