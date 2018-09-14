@@ -105,18 +105,18 @@ public class TopStoriesFragment extends Fragment {
         disposable = APIStreams.getTopstoriesArticles().subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.e("TAG", "On Next");
+                Log.i("NETWORK", "TopStoriesFragment : On Next");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG", "On Error" + Log.getStackTraceString(e));
+                Log.i("NETWORK", "TopStoriesFragment : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG", "On Complete !!");
+                Log.i("NETWORK", "TopStoriesFragment : On Complete !!");
             }
         });
     }

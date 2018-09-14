@@ -161,9 +161,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             default:
                 break;
         }
-        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.activity_main_viewpager + ":" + pager.getCurrentItem());
-        ((CustomNewsFragment)page).configureAndShowArticleHTTP();
+        refreshCustomNewsTab();
         this.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void refreshCustomNewsTab(){
+        Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.activity_main_viewpager + ":" + pager.getCurrentItem());
+        ((CustomNewsFragment)page).configureRecyclerView();
+        ((CustomNewsFragment)page).configureAndShowArticleHTTP();
+        ((CustomNewsFragment)page).configureSwipeRefreshLayout();
+        ((CustomNewsFragment)page).configureOnClickRecyclerView();
     }
 }

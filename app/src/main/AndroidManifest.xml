@@ -44,7 +44,7 @@
                 android:value="com.duboscq.nicolas.mynews.controllers.activities.MainActivity" />
         </activity>
 
-        <receiver android:name=".controllers.activities.NotificationPublisher" />
+        <receiver android:name=".services.NotificationPublisher" />
 
     </application>
 

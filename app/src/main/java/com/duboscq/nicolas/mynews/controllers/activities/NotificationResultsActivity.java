@@ -94,18 +94,18 @@ public class NotificationResultsActivity extends AppCompatActivity {
         disposable = APIStreams.getSearchDocs("\""+notification_query+"\""+" AND section_name.contains:("+notification_section+")",todayDateformat,todayDateformatplus).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.e("TAG", "On Next");
+                Log.i("NETWORK", "NotificationResults : On Next");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG", "On Error" + Log.getStackTraceString(e));
+                Log.i("NETWORK", "NotificationResults : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG", "On Complete !!");
+                Log.i("NETWORK", "NotificationResults : On Complete !!");
             }
         });
     }

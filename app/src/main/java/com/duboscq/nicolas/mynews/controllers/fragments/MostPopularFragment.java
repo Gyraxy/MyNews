@@ -102,18 +102,18 @@ public class MostPopularFragment extends Fragment {
         disposable = APIStreams.getMostPopularArticles().subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.e("TAG", "On Next");
+                Log.i("NETWORK", "MostPopularFragment : On Next");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG", "On Error" + Log.getStackTraceString(e));
+                Log.i("NETWORK", "MostPopularFragment : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG", "On Complete !!");
+                Log.i("NETWORK", "MostPopularFragment : On Complete !!");
             }
         });
     }

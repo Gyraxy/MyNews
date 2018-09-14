@@ -1,4 +1,4 @@
-package com.duboscq.nicolas.mynews.controllers.activities;
+package com.duboscq.nicolas.mynews.services;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.duboscq.nicolas.mynews.R;
+import com.duboscq.nicolas.mynews.controllers.activities.NotificationResultsActivity;
 import com.duboscq.nicolas.mynews.models.Docs;
 import com.duboscq.nicolas.mynews.models.GeneralInfo;
 import com.duboscq.nicolas.mynews.utils.APIStreams;
@@ -39,8 +40,8 @@ public class NotificationPublisher extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         notification_query = SharedPreferencesUtility.getInstance(context).getString("NOTIFICATION_QUERY",null);
         notification_section = SharedPreferencesUtility.getInstance(context).getString("NOTIFICATION_SECTION",null);
-        Log.e("TAG","Notification Query"+notification_query);
-        Log.e("TAG","Notification Section"+notification_section);
+        Log.i("NETWORK","Notification Query"+notification_query);
+        Log.i("NETWORK","Notification Section"+notification_section);
         getTodayDate();
         getAPIDocs(context);
     }
@@ -76,18 +77,18 @@ public class NotificationPublisher extends BroadcastReceiver {
         disposable = APIStreams.getSearchDocs("\""+notification_query+"\""+" AND section_name.contains:("+notification_section+")",todayDateformat,todayDateformatplus).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.e("TAG", "Notification : Stream on Next");
+                Log.i("NETWORK", "Notification : Stream on Next");
                 docs = generalInfo.getResponse().getDocs();
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG", "Notification : Stream On Error" + Log.getStackTraceString(e));
+                Log.i("NETWORK", "Notification : Stream On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG", "Notification : Stream On Complete");
+                Log.i("NETWORK", "Notification : Stream On Complete");
                 addNotification(context);
             }
         });
@@ -98,6 +99,5 @@ public class NotificationPublisher extends BroadcastReceiver {
         Date date = new Date();
         todayDateformat = (dateFormat.format(date));
         todayDateformatplus = String.valueOf(Integer.parseInt(todayDateformat)+1);
-        Log.e("TAG",todayDateformat);
     }
 }

@@ -66,10 +66,13 @@ public class CustomNewsFragment extends Fragment {
         ButterKnife.bind(this, view);
         section_custom = SharedPreferencesUtility.getString(getContext(),"WEEKLY_SECTION_NAME");
         if (section_custom != null){
+            swipeRefreshLayout.setEnabled(true);
             configureRecyclerView();
             configureAndShowArticleHTTP();
             configureSwipeRefreshLayout();
             configureOnClickRecyclerView();
+        } else if (section_custom == null){
+            swipeRefreshLayout.setEnabled(false);
         }
         return view;
     }
@@ -83,14 +86,14 @@ public class CustomNewsFragment extends Fragment {
         });
     }
 
-    private void configureRecyclerView() {
+    public void configureRecyclerView() {
         this.docs = new ArrayList<>();
         this.adapter = new DocsRecyclerViewAdapter(this.docs,Glide.with(this));
         this.recyclerView.setAdapter(this.adapter);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void configureOnClickRecyclerView() {
+    public void configureOnClickRecyclerView() {
         ItemClickSupport.addTo(recyclerView, R.layout.fragment_articles)
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
@@ -107,18 +110,18 @@ public class CustomNewsFragment extends Fragment {
         disposable = APIStreams.getWeeklyArticles("section_name:(\""+section_custom+"\")").subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.e("TAG", "On Next");
+                Log.i("NETWORK", "CustomNewsFragment : On Next");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG", "On Error" + Log.getStackTraceString(e));
+                Log.i("NETWORK", "CustomNewsFragment : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG", "On Complete !!");
+                Log.i("NETWORK", "CustomNewsFragment : On Complete !!");
             }
         });
     }

@@ -35,6 +35,7 @@ import com.duboscq.nicolas.mynews.R;
 import com.duboscq.nicolas.mynews.adapters.DocsRecyclerViewAdapter;
 import com.duboscq.nicolas.mynews.models.Docs;
 import com.duboscq.nicolas.mynews.models.GeneralInfo;
+import com.duboscq.nicolas.mynews.services.NotificationPublisher;
 import com.duboscq.nicolas.mynews.utils.APIStreams;
 import com.duboscq.nicolas.mynews.utils.DateUtility;
 import com.duboscq.nicolas.mynews.utils.ItemClickSupport;
@@ -100,7 +101,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
         setContentView(R.layout.activity_search_notifications);
         ButterKnife.bind(this);
         activity = getIntent().getExtras().getString("NOTIFICATION_SEARCH_ACTIVITY");
-        Log.e("TAG",activity);
+        Log.i("DATA",activity);
         configureSearchToolbar();
         switch (activity) {
             case "search":
@@ -161,11 +162,12 @@ public class SearchNotificationActivity extends AppCompatActivity{
                 && !sports_chb.isChecked()
                 && !travel_chb.isChecked()) {
             Toast.makeText(this, "Please select at least one category", Toast.LENGTH_SHORT).show();
-        } else if (begin_date == "" && end_date == ""){
+        } else if (begin_date==null && end_date==null){
+            Log.e("TAG","Recherche sans date");
             configureSection();
             configureAndShowArticleHTTPWithoutDate();
             saveSearchParameters();
-        } else if (begin_date.length()>0 && end_date.length()>0){
+        } else if (begin_date!=null && end_date!=null){
             if (checkBeginDateBeforeEndDate()){
                 Toast.makeText(this, "Begin date is after End Date, please modify", Toast.LENGTH_SHORT).show();
             } else {
@@ -173,11 +175,11 @@ public class SearchNotificationActivity extends AppCompatActivity{
                 configureAndShowArticleHTTP();
                 saveSearchParameters();
             }
-        } else if (begin_date.length()==0 && end_date.length()>0) {
+        } else if (begin_date==null && end_date!=null) {
             configureSection();
             configureAndShowArticleHTTPWithoutBeginDate();
             saveSearchParameters();
-        } else if (begin_date.length()>0 && end_date.length()==0) {
+        } else if (begin_date!=null && end_date==null) {
             configureSection();
             configureAndShowArticleHTTPWithoutEndDate();
             saveSearchParameters();
@@ -193,19 +195,18 @@ public class SearchNotificationActivity extends AppCompatActivity{
                     && !politics_chb.isChecked()
                     && !sports_chb.isChecked()
                     && !travel_chb.isChecked()){
-                Log.e("TAG","No Notification category selected");
                 Toast.makeText(this, "Please select at least one category", Toast.LENGTH_SHORT).show();
                 notification_switch.setChecked(false);
             }
             else {
                 configureSection();
                 saveNotificationParameters();
-                Log.e("TAG","Switch checked");
+                Log.i("UI","Switch checked");
                 scheduleDailyNotification();
                 Toast.makeText(SearchNotificationActivity.this, "Notification scheduled", Toast.LENGTH_LONG).show();
             }
         } else if (!checked){
-            Log.e("TAG","Switch unchecked");
+            Log.i("UI","Switch unchecked");
             cancelDailyNotification();
             Toast.makeText(SearchNotificationActivity.this, "Notification stopped", Toast.LENGTH_LONG).show();
         }
@@ -329,18 +330,18 @@ public class SearchNotificationActivity extends AppCompatActivity{
         disposable = APIStreams.getSearchDocs("\""+search_query+"\""+" AND section_name.contains:("+search_section+")",begin_date,end_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.e("TAG", "SearchActivity : On Next");
+                Log.i("NETWORK", "SearchActivity : On Next");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG", "SearchActivity : On Error" + Log.getStackTraceString(e));
+                Log.i("NETWORK", "SearchActivity : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG", "SearchActivity : On Complete !!");
+                Log.i("NETWORK", "SearchActivity : On Complete !!");
             }
         });
     }
@@ -349,18 +350,18 @@ public class SearchNotificationActivity extends AppCompatActivity{
         disposable = APIStreams.getSearchDocsWithoutDate("\""+search_query+"\""+" AND section_name.contains:("+search_section+")").subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.e("TAG", "SearchActivity : On Next HTTP Request without date");
+                Log.i("NETWORK", "SearchActivity : On Next HTTP Request without date");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG", "SearchActivity : On Error" + Log.getStackTraceString(e));
+                Log.i("NETWORK", "SearchActivity : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG", "SearchActivity : On Complete HTTP Request without date !!");
+                Log.i("NETWORK", "SearchActivity : On Complete HTTP Request without date !!");
             }
         });
     }
@@ -369,18 +370,18 @@ public class SearchNotificationActivity extends AppCompatActivity{
         disposable = APIStreams.getSearchDocsWithoutBeginDate("\""+search_query+"\""+" AND section_name.contains:("+search_section+")",end_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.e("TAG", "SearchActivity : On Next HTTP Request without Begin date");
+                Log.i("NETWORK", "SearchActivity : On Next HTTP Request without Begin date");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG", "SearchActivity : On Error" + Log.getStackTraceString(e));
+                Log.i("NETWORK", "SearchActivity : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG", "SearchActivity : On Complete HTTP Request without Begin date");
+                Log.i("NETWORK", "SearchActivity : On Complete HTTP Request without Begin date");
             }
         });
     }
@@ -389,18 +390,18 @@ public class SearchNotificationActivity extends AppCompatActivity{
         disposable = APIStreams.getSearchDocsWithoutEndDate("\""+search_query+"\""+" AND section_name.contains:("+search_section+")",begin_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.e("TAG", "SearchActivity : On Next HTTP Request without End date");
+                Log.i("NETWORK", "SearchActivity : On Next HTTP Request without End date");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG", "SearchActivity : On Error" + Log.getStackTraceString(e));
+                Log.i("NETWORK", "SearchActivity : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG", "SearchActivity : On Complete HTTP Request without End date");
+                Log.i("NETWORK", "SearchActivity : On Complete HTTP Request without End date");
             }
         });
     }
@@ -421,7 +422,6 @@ public class SearchNotificationActivity extends AppCompatActivity{
         if (docs.isEmpty()) {
             noResultsPopup();
         } else {
-            Log.e("TAG","Begin Date "+begin_date+"End Date "+end_date+"Query :"+search_query);
             configureRecyclerView();
             configureOnClickRecyclerView();
         }
@@ -472,12 +472,16 @@ public class SearchNotificationActivity extends AppCompatActivity{
     }
 
     private void getSearchParameters(){
-        if (search_begin_date_edt.getText() != null){
+        if (search_begin_date_edt.getText().length()==0){
+            begin_date = null;
+        } else if (search_begin_date_edt.getText().length()>0){
             begin_date = DateUtility.convertingSearchDate(search_begin_date_edt.getText().toString());
-        } else begin_date = null;
-        if (search_end_date_edt.getText() != null){
+        }
+        if (search_end_date_edt.getText().length()==0){
+            end_date = null;
+        } else if (search_end_date_edt.getText().length()>0){
             end_date = String.valueOf(Integer.parseInt(DateUtility.convertingSearchDate(search_end_date_edt.getText().toString()))+1);
-        } else end_date = null;
+        }
         search_query = search_query_edt.getText().toString();
     }
 
@@ -587,11 +591,11 @@ public class SearchNotificationActivity extends AppCompatActivity{
         calendar_notification.set(Calendar.SECOND, 0);
 
         if (calendar_notification.getTimeInMillis() < System.currentTimeMillis()) {
-            calendar_notification.add(Calendar.DAY_OF_YEAR, 1);
+            calendar_notification.add(Calendar.DATE, 1);
         }
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar_notification.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar_notification.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
     }
 
     //Notifications canceled
