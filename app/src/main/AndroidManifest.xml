@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.duboscq.nicolas.mynews">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_mynews_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_mynews_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".controllers.activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".controllers.activities.SearchNotificationActivity"
+            android:label="Search"
+            android:parentActivityName=".controllers.activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.duboscq.nicolas.mynews.controllers.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".controllers.activities.ArticleWebViewActivity"
+            android:label="Article"
+            android:parentActivityName=".controllers.activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.duboscq.nicolas.mynews.controllers.activities.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".controllers.activities.NotificationResultsActivity"
+            android:label="Notification Results"
+            android:parentActivityName=".controllers.activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.duboscq.nicolas.mynews.controllers.activities.MainActivity" />
+        </activity>
+
+        <receiver android:name=".services.NotificationPublisher" />
+
+    </application>
+
+</manifest>

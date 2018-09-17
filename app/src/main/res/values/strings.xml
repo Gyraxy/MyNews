@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">My News</string>
+
+    <!-- MENU STRINGS -->
+    <string name="notifications">Notifications</string>
+    <string name="help">Help</string>
+    <string name="about">About</string>
+    <string name="search">Search</string>
+    <string name="notifications_results">Notifications Results</string>
+
+    <!-- SEARCH ACTIVITY STRINGS -->
+    <string name="search_query">Search query term</string>
+    <string name="begin_date">Begin Date</string>
+    <string name="end_date">End Date</string>
+    <string name="arts">Arts</string>
+    <string name="business">Business</string>
+    <string name="entrepreneurs">Entrepreneurs</string>
+    <string name="politics">Politics</string>
+    <string name="sports">Sports</string>
+    <string name="travel">Travel</string>
+
+    <!-- NAVIGATION DRAWER -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="drawer_arts">ARTS</string>
+    <string name="drawer_business">BUSINESS</string>
+    <string name="drawer_entrepreneurs">ENTREPRENEURS</string>
+    <string name="drawer_politics">POLITICS</string>
+    <string name="drawer_sports">SPORTS</string>
+    <string name="drawer_travel">TRAVEL</string>
+
+</resources>
