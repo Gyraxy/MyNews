@@ -5,5 +5,4 @@ android:
 
     # The SDK version used to compile your project
     - android-27
-    
-before_install: - chmod +x gradlew 
+  before_install: - chmod +x gradlew
