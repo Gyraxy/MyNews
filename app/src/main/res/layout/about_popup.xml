@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="200dp"
-    android:layout_height="50dp"
+    android:layout_width="@dimen/about_popup_width"
+    android:layout_height="@dimen/about_popup_height"
     android:orientation="vertical"
     android:gravity="center"
     android:id="@+id/about_popup_layout">
@@ -10,10 +10,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="My News App : V1.0"/>
+        android:text="@string/about_popup_app"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Made By DUBOSCQ Nicolas"/>
+        android:text="@string/about_popup_made_by"/>
 
 </LinearLayout>

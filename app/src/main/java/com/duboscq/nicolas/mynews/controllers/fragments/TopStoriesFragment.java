@@ -49,6 +49,7 @@ public class TopStoriesFragment extends Fragment {
     List<Articles> article_top_stories_list;
     ArticleRecyclerViewAdapter adapter;
     private Disposable disposable;
+    String NETWORK = "NETWORK";
 
     public TopStoriesFragment() {
     }
@@ -101,22 +102,22 @@ public class TopStoriesFragment extends Fragment {
                 });
     }
 
-    private void configureAndShowArticleHTTP() {
+    public void configureAndShowArticleHTTP() {
         disposable = APIStreams.getTopstoriesArticles().subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.i("NETWORK", "TopStoriesFragment : On Next");
+                Log.i(NETWORK, "TopStoriesFragment : On Next");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.i("NETWORK", "TopStoriesFragment : On Error" + Log.getStackTraceString(e));
+                Log.i(NETWORK, "TopStoriesFragment : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.i("NETWORK", "TopStoriesFragment : On Complete !!");
+                Log.i(NETWORK, "TopStoriesFragment : On Complete !!");
             }
         });
     }

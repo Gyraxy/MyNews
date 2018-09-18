@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //FOR DATA
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
+    private String KEY_SECTION_NAME = "WEEKLY_SECTION_NAME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +96,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //VIEWPAGER CONFIGURATION AND TABS
     private void configureViewPagerAndTabs(){
         pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(),getApplicationContext()));
-        int tabToOpen = getIntent().getIntExtra("TABS", -1);
-        if (tabToOpen!=-1) {
-            pager.setCurrentItem(3);
-        }else pager.setCurrentItem(0);
         tabs= findViewById(R.id.activity_main_tabs);
         tabs.setupWithViewPager(pager);
         tabs.setTabMode(TabLayout.MODE_FIXED);
@@ -135,28 +132,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabs.getTabAt(2).select();
         switch (item.getItemId()){
             case R.id.activity_main_drawer_arts:
-                SharedPreferencesUtility.putString(this,"WEEKLY_SECTION_NAME","arts");
-                tabs.getTabAt(2).setText("ARTS");
+                SharedPreferencesUtility.putString(this,KEY_SECTION_NAME,"arts");
+                tabs.getTabAt(2).setText(R.string.drawer_arts);
                 break;
             case R.id.activity_main_drawer_business:
-                SharedPreferencesUtility.putString(this,"WEEKLY_SECTION_NAME","business");
-                tabs.getTabAt(2).setText("BUSINESS");
+                SharedPreferencesUtility.putString(this,KEY_SECTION_NAME,"business");
+                tabs.getTabAt(2).setText(R.string.drawer_business);
                 break;
             case R.id.activity_main_drawer_entrepreneurs:
-                SharedPreferencesUtility.putString(this,"WEEKLY_SECTION_NAME","entrepreneurs");
-                tabs.getTabAt(2).setText("ENTREPRENEURS");
+                SharedPreferencesUtility.putString(this,KEY_SECTION_NAME,"entrepreneurs");
+                tabs.getTabAt(2).setText(R.string.drawer_entrepreneurs);
                 break;
             case R.id.activity_main_drawer_politics:
-                SharedPreferencesUtility.putString(this,"WEEKLY_SECTION_NAME","politics");
-                tabs.getTabAt(2).setText("POLITICS");
+                SharedPreferencesUtility.putString(this,KEY_SECTION_NAME,"politics");
+                tabs.getTabAt(2).setText(R.string.drawer_politics);
                 break;
             case R.id.activity_main_drawer_sports:
-                SharedPreferencesUtility.putString(this,"WEEKLY_SECTION_NAME","sports");
-                tabs.getTabAt(2).setText("SPORTS");
+                SharedPreferencesUtility.putString(this,KEY_SECTION_NAME,"sports");
+                tabs.getTabAt(2).setText(R.string.drawer_sports);
                 break;
             case R.id.activity_main_drawer_travel:
-                SharedPreferencesUtility.putString(this,"WEEKLY_SECTION_NAME","travel");
-                tabs.getTabAt(2).setText("TRAVEL");
+                SharedPreferencesUtility.putString(this,KEY_SECTION_NAME,"travel");
+                tabs.getTabAt(2).setText(R.string.drawer_travel);
                 break;
             default:
                 break;

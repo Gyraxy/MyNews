@@ -47,6 +47,7 @@ public class MostPopularFragment extends Fragment {
     List<Articles> article_most_popular;
     ArticleRecyclerViewAdapter adapter;
     private Disposable disposable;
+    String NETWORK = "NETWORK";
 
     public MostPopularFragment(){ }
 
@@ -102,18 +103,18 @@ public class MostPopularFragment extends Fragment {
         disposable = APIStreams.getMostPopularArticles().subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.i("NETWORK", "MostPopularFragment : On Next");
+                Log.i(NETWORK, "MostPopularFragment : On Next");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.i("NETWORK", "MostPopularFragment : On Error" + Log.getStackTraceString(e));
+                Log.i(NETWORK, "MostPopularFragment : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.i("NETWORK", "MostPopularFragment : On Complete !!");
+                Log.i(NETWORK, "MostPopularFragment : On Complete !!");
             }
         });
     }

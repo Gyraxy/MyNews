@@ -8,7 +8,7 @@
     <string name="search">Search</string>
     <string name="notifications_results">Notifications Results</string>
 
-    <!-- SEARCH ACTIVITY STRINGS -->
+    <!-- SEARCH/NOTIFICATION ACTIVITY STRINGS -->
     <string name="search_query">Search query term</string>
     <string name="begin_date">Begin Date</string>
     <string name="end_date">End Date</string>
@@ -18,6 +18,7 @@
     <string name="politics">Politics</string>
     <string name="sports">Sports</string>
     <string name="travel">Travel</string>
+    <string name="switch_notification">Enable Notifications (once per day)</string>
 
     <!-- NAVIGATION DRAWER -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -28,5 +29,9 @@
     <string name="drawer_politics">POLITICS</string>
     <string name="drawer_sports">SPORTS</string>
     <string name="drawer_travel">TRAVEL</string>
+
+    <!-- ABOUT POPUP -->
+    <string name="about_popup_app">My News App : V1.0</string>
+    <string name="about_popup_made_by">Made By DUBOSCQ Nicolas</string>
 
 </resources>

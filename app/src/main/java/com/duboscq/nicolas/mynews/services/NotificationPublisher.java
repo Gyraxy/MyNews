@@ -32,16 +32,18 @@ public class NotificationPublisher extends BroadcastReceiver {
 
     public static final int ID_NOTIFICATION = 1984;
     String CHANNEL_ID = "my_channel_01",todayDateformat,todayDateformatplus,notification_query,notification_section;
+    String NETWORK = "NETWORK";
+    String NOTIFICATION_QUERY = "NOTIFICATION_QUERY",NOTIFICATION_SECTION = "NOTIFICATION_SECTION";
     CharSequence name = "my_channel";
     Disposable disposable;
     List<Docs> docs;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        notification_query = SharedPreferencesUtility.getInstance(context).getString("NOTIFICATION_QUERY",null);
-        notification_section = SharedPreferencesUtility.getInstance(context).getString("NOTIFICATION_SECTION",null);
-        Log.i("NETWORK","Notification Query"+notification_query);
-        Log.i("NETWORK","Notification Section"+notification_section);
+        notification_query = SharedPreferencesUtility.getInstance(context).getString(NOTIFICATION_QUERY,null);
+        notification_section = SharedPreferencesUtility.getInstance(context).getString(NOTIFICATION_SECTION,null);
+        Log.i(NETWORK,"Notification Query"+notification_query);
+        Log.i(NETWORK,"Notification Section"+notification_section);
         getTodayDate();
         getAPIDocs(context);
     }
@@ -62,7 +64,7 @@ public class NotificationPublisher extends BroadcastReceiver {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context.getApplicationContext(), CHANNEL_ID)
-                .setContentTitle("Notifications")
+                .setContentTitle("My News - Notification")
                 .setContentText("We have found "+docs.size()+" new articles")
                 .setSmallIcon(R.drawable.ic_news)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)

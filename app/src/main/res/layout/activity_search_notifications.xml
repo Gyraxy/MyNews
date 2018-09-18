@@ -21,7 +21,7 @@
         android:id="@+id/activity_search_search_edt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="@dimen/query_text"
         android:hint="@string/search_query"
         android:backgroundTint="@color/colorPrimary"
         tools:targetApi="lollipop" />
@@ -46,12 +46,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/begin_date"
                 android:paddingStart="5dp"
-                android:textSize="12sp"/>
+                android:textSize="@dimen/chb_text"/>
 
             <EditText
                 android:id="@+id/activity_search_begin_date_edt"
-                android:layout_width="170dp"
-                android:layout_height="42dp"
+                android:layout_width="@dimen/date_edt_width"
+                android:layout_height="@dimen/date_edt_height"
                 android:drawableRight="@drawable/ic_arrow_drop_down_black_24"
                 android:inputType="date"/>
 
@@ -67,12 +67,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/end_date"
-                android:textSize="12sp"/>
+                android:textSize="@dimen/chb_text"/>
 
             <EditText
                 android:id="@+id/activity_search_end_date_edt"
-                android:layout_width="170dp"
-                android:layout_height="42dp"
+                android:layout_width="@dimen/date_edt_width"
+                android:layout_height="@dimen/date_edt_height"
                 android:drawableRight="@drawable/ic_arrow_drop_down_black_24"
                 android:inputType="date"/>
 
@@ -98,7 +98,7 @@
                 android:id="@+id/activity_search_chb_arts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="@dimen/chb_text"
                 android:text="@string/arts"
                 android:textColor="@color/colorBlack"/>
 
@@ -107,7 +107,7 @@
                 android:id="@+id/activity_search_chb_business"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="@dimen/chb_text"
                 android:text="@string/business"
                 android:textColor="@color/colorBlack"/>
 
@@ -116,7 +116,7 @@
                 android:id="@+id/activity_search_chb_entrepreneurs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="@dimen/chb_text"
                 android:text="@string/entrepreneurs"
                 android:textColor="@color/colorBlack"/>
 
@@ -133,7 +133,7 @@
                 android:id="@+id/activity_search_chb_politics"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="@dimen/chb_text"
                 android:text="@string/politics"
                 android:textColor="@color/colorBlack"/>
 
@@ -142,7 +142,7 @@
                 android:id="@+id/activity_search_chb_sports"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="@dimen/chb_text"
                 android:text="@string/sports"
                 android:textColor="@color/colorBlack"/>
 
@@ -152,7 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/travel"
-                android:textSize="12sp"
+                android:textSize="@dimen/chb_text"
                 android:textColor="@color/colorBlack"/>
 
         </LinearLayout>
@@ -204,9 +204,9 @@
             android:id="@+id/activity_notification_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enable Notifications (once per day)"
+            android:text="@string/switch_notification"
             android:paddingStart="5dp"
-            android:textSize="12sp"/>
+            android:textSize="@dimen/chb_text"/>
 
     </LinearLayout>
 

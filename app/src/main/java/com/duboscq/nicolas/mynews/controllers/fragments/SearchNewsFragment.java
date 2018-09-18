@@ -44,10 +44,9 @@ public class SearchNewsFragment extends Fragment {
     //FOR DATA
     List<Docs> docs;
     DocsRecyclerViewAdapter adapter;
-    String begin_date;
-    String end_date;
-    String search_section;
-    String search_query;
+    String begin_date,end_date;
+    String search_section,search_query;
+    String NETWORK = "NETWORK",SEARCH_SECTION = "SEARCH_SECTION",SEARCH_BEGIN_DATE = "SEARCH_BEGIN_DATE",SEARCH_END_DATE = "SEARCH_END_DATE",SEARCH_QUERY = "SEARCH_QUERY";
     private Disposable disposable;
 
     public SearchNewsFragment(){ }
@@ -129,18 +128,18 @@ public class SearchNewsFragment extends Fragment {
         disposable = APIStreams.getSearchDocs("\""+search_query+"\""+" AND section_name.contains:("+search_section+")",begin_date,end_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.i("NETWORK", "SearchNewsFragment : Search Fragment : On Next");
+                Log.i(NETWORK, "SearchNewsFragment : Search Fragment : On Next");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.i("NETWORK", "SearchNewsFragment : On Error" + Log.getStackTraceString(e));
+                Log.i(NETWORK, "SearchNewsFragment : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.i("NETWORK", "SearchNewsFragment : On Complete !!");
+                Log.i(NETWORK, "SearchNewsFragment : On Complete !!");
             }
         });
     }
@@ -149,18 +148,18 @@ public class SearchNewsFragment extends Fragment {
         disposable = APIStreams.getSearchDocsWithoutDate("\""+search_query+"\""+" AND section_name.contains:("+search_section+")").subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.i("NETWORK", "SearchNewsFragment : On Next HTTP Request without date");
+                Log.i(NETWORK, "SearchNewsFragment : On Next HTTP Request without date");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.i("NETWORK", "SearchNewsFragment : On Error" + Log.getStackTraceString(e));
+                Log.i(NETWORK, "SearchNewsFragment : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.i("NETWORK", "SearchNewsFragment : On Complete HTTP Request without date !!");
+                Log.i(NETWORK, "SearchNewsFragment : On Complete HTTP Request without date !!");
             }
         });
     }
@@ -169,18 +168,18 @@ public class SearchNewsFragment extends Fragment {
         disposable = APIStreams.getSearchDocsWithoutBeginDate("\""+search_query+"\""+" AND section_name.contains:("+search_section+")",end_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.i("NETWORK", "SearchNewsFragment : On Next HTTP Request without Begin date");
+                Log.i(NETWORK, "SearchNewsFragment : On Next HTTP Request without Begin date");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.i("NETWORK", "SearchNewsFragment : On Error" + Log.getStackTraceString(e));
+                Log.i(NETWORK, "SearchNewsFragment : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.i("NETWORK", "SearchNewsFragment : On Complete HTTP Request without Begin date");
+                Log.i(NETWORK, "SearchNewsFragment : On Complete HTTP Request without Begin date");
             }
         });
     }
@@ -189,18 +188,18 @@ public class SearchNewsFragment extends Fragment {
         disposable = APIStreams.getSearchDocsWithoutEndDate("\""+search_query+"\""+" AND section_name.contains:("+search_section+")",begin_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
-                Log.i("NETWORK", "SearchNewsFragment : On Next HTTP Request without End date");
+                Log.i(NETWORK, "SearchNewsFragment : On Next HTTP Request without End date");
                 updateArticles(generalInfo);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.i("NETWORK", "SearchNewsFragment : On Error" + Log.getStackTraceString(e));
+                Log.i(NETWORK, "SearchNewsFragment : On Error" + Log.getStackTraceString(e));
             }
 
             @Override
             public void onComplete() {
-                Log.i("NETWORK", "SearchNewsFragment : On Complete HTTP Request without End date");
+                Log.i(NETWORK, "SearchNewsFragment : On Complete HTTP Request without End date");
             }
         });
     }
@@ -213,9 +212,9 @@ public class SearchNewsFragment extends Fragment {
     }
 
     private void getSavedSearchParameters(){
-        search_section= SharedPreferencesUtility.getString(getContext(),"SEARCH_SECTION");
-        begin_date = SharedPreferencesUtility.getString(getContext(),"SEARCH_BEGIN_DATE");
-        end_date = SharedPreferencesUtility.getString(getContext(),"SEARCH_END_DATE");
-        search_query = SharedPreferencesUtility.getString(getContext(),"SEARCH_QUERY");
+        search_section= SharedPreferencesUtility.getString(getContext(),SEARCH_SECTION);
+        begin_date = SharedPreferencesUtility.getString(getContext(),SEARCH_BEGIN_DATE);
+        end_date = SharedPreferencesUtility.getString(getContext(),SEARCH_END_DATE);
+        search_query = SharedPreferencesUtility.getString(getContext(),SEARCH_QUERY);
     }
 }

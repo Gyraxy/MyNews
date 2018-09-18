@@ -51,7 +51,7 @@ public class CustomNewsFragment extends Fragment {
     //FOR DATA
     List<Docs> docs;
     DocsRecyclerViewAdapter adapter;
-    String section_custom;
+    String section_custom,WEEKLY_SECTION_NAME="WEEKLY_SECTION_NAME";
     private Disposable disposable;
 
     public CustomNewsFragment(){ }
@@ -106,7 +106,7 @@ public class CustomNewsFragment extends Fragment {
     }
 
     public void configureAndShowArticleHTTP() {
-        section_custom = SharedPreferencesUtility.getString(getContext(),"WEEKLY_SECTION_NAME");
+        section_custom = SharedPreferencesUtility.getString(getContext(),WEEKLY_SECTION_NAME);
         disposable = APIStreams.getWeeklyArticles("section_name:(\""+section_custom+"\")").subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {

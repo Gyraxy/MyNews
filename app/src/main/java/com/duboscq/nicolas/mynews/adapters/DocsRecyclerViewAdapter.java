@@ -41,10 +41,4 @@ public class DocsRecyclerViewAdapter extends RecyclerView.Adapter<DocsViewHolder
     public int getItemCount() {
         return docs.size();
     }
-
-    public void refreshDocs(List<Docs> updated_docs) {
-        this.docs.clear();
-        this.docs.addAll(updated_docs);
-        notifyDataSetChanged();
-    }
 }

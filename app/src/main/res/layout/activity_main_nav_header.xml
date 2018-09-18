@@ -21,8 +21,8 @@
             android:gravity="center">
 
             <ImageView
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="@dimen/my_news_ico"
+                android:layout_height="@dimen/my_news_ico"
                 android:src="@mipmap/ic_mynews_launcher" />
 
         </LinearLayout>

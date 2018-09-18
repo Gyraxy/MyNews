@@ -586,8 +586,8 @@ public class SearchNotificationActivity extends AppCompatActivity{
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar calendar_notification = Calendar.getInstance();
-        calendar_notification.set(Calendar.HOUR_OF_DAY, 7);
-        calendar_notification.set(Calendar.MINUTE, 0);
+        calendar_notification.set(Calendar.HOUR_OF_DAY, 8);
+        calendar_notification.set(Calendar.MINUTE, 10);
         calendar_notification.set(Calendar.SECOND, 0);
 
         if (calendar_notification.getTimeInMillis() < System.currentTimeMillis()) {
