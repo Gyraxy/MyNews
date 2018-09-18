@@ -1,1 +1,1 @@
-# MyNews
+# MyNews [![Build Status](https://travis-ci.com/Gyraxy/MyNews.svg?branch=dev)](https://travis-ci.com/Gyraxy/MyNews)
