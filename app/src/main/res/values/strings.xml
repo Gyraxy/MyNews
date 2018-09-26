@@ -34,4 +34,15 @@
     <string name="about_popup_app">My News App : V1.0</string>
     <string name="about_popup_made_by">Made By DUBOSCQ Nicolas</string>
 
+    <!-- HELP POPUP -->
+    <string name="help_popup_title">My News - Help</string>
+    <string name="help_popup_topstories_mostpop">Top Stories and Most Popular Tabs :</string>
+    <string name="help_popup_topstories_mostpop_text">The articles in these two tabs are automatically set and can be refreshed by swipping.</string>
+    <string name="help_popup_weekly_tabs">Weekly tabs :</string>
+    <string name="help_popup_weekly_tabs_text">Weekly tab shows articles of the last 7 days from one selected section. Section can be selected in the Navigation Drawer Menu.</string>
+    <string name="help_popup_search">Search Function :</string>
+    <string name="help_popup_search_text">Articles can be search according to user wish. Click on the loop to go to search function. At least one query and one section must be selected. A list of articles will be shown as result or a no result popup is displayed.Searched articles are saved and can still be read in the Search tab.</string>
+    <string name="help_popup_notification">Notification :</string>
+    <string name="help_popup_notification_text">User can activate Notification. Go on the notification menu and select at least one section and one query. When the switch is activated notification will be scheduled every day at 8 am. Notifications are canceled when switch unactivated. Notification articles results are show by clicking on the ring icon in the home display.</string>
+
 </resources>

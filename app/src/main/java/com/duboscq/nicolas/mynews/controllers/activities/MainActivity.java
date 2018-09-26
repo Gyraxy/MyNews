@@ -1,5 +1,6 @@
 package com.duboscq.nicolas.mynews.controllers.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -68,6 +69,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(notification_intent);
                 break;
             case R.id.action_help:
+                AlertDialog.Builder help_popup_diag = new AlertDialog.Builder(this);
+                LayoutInflater help_inflater = getLayoutInflater();
+                View help_popup_view = help_inflater.inflate(R.layout.help_popup,null);
+                help_popup_diag.setView(help_popup_view);
+                help_popup_diag.show();
                 break;
             case R.id.action_about:
                 AlertDialog.Builder about_popup_diag = new AlertDialog.Builder(this);

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/help_popup_width"
+    android:layout_height="@dimen/help_popup_height"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:id="@+id/help_popup">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:text="@string/help_popup_title"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/help_popup_title_text"
+        android:textStyle="bold" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorGrey"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/help_popup_subtitle_text"
+        android:text="@string/help_popup_topstories_mostpop"
+        android:textStyle="italic"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/help_popup_description_text"
+        android:padding="5dp"
+        android:text="@string/help_popup_topstories_mostpop_text"
+        android:textStyle="normal"
+        android:textAlignment="center"/>
+
+    <View
+        android:layout_width="150dp"
+        android:layout_height="1dp"
+        android:background="@color/colorGrey"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/help_popup_subtitle_text"
+        android:text="@string/help_popup_weekly_tabs"
+        android:textStyle="italic"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/help_popup_weekly_tabs_text"
+        android:textAlignment="center"
+        android:textSize="@dimen/help_popup_description_text"
+        android:textStyle="normal" />
+
+    <View
+        android:layout_width="150dp"
+        android:layout_height="1dp"
+        android:background="@color/colorGrey"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/help_popup_subtitle_text"
+        android:text="@string/help_popup_search"
+        android:textStyle="italic"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/help_popup_description_text"
+        android:padding="5dp"
+        android:text="@string/help_popup_search_text"
+        android:textStyle="normal"
+        android:textAlignment="center"/>
+
+    <View
+        android:layout_width="150dp"
+        android:layout_height="1dp"
+        android:background="@color/colorGrey"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/help_popup_subtitle_text"
+        android:text="@string/help_popup_notification"
+        android:textStyle="italic"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/help_popup_notification_text"
+        android:textAlignment="center"
+        android:textSize="@dimen/help_popup_description_text"
+        android:textStyle="normal" />
+
+</LinearLayout>

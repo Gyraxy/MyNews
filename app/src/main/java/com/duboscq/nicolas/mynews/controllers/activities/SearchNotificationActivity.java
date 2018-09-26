@@ -85,7 +85,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
 
 
     //--FOR DATA--
-    String search_query,begin_date=null,end_date,search_section=null,notification_section=null,section_chbx_arts,section_chbx_business,section_chbx_entrepreneurs,section_chbx_politics,section_chbx_sports,section_chbx_travel;
+    String search_query,notification_query,begin_date=null,end_date,search_section=null,notification_section=null,section_chbx_arts,section_chbx_business,section_chbx_entrepreneurs,section_chbx_politics,section_chbx_sports,section_chbx_travel;
     String activity;
     Calendar newDate = Calendar.getInstance();
     DatePickerDialog mDatePickerDialogbegin,mDatePickerDialogend;
@@ -110,6 +110,8 @@ public class SearchNotificationActivity extends AppCompatActivity{
             case "notification":
                 setNotificationActivityLayout();
                 getNotificationParameters();
+                search_query_edt.setSelection(search_query_edt.getText().length());
+                Log.i("TEST",search_query_edt.length()+"");
                 break;
             default:
                 break;
@@ -148,7 +150,12 @@ public class SearchNotificationActivity extends AppCompatActivity{
         setTitle("Notifications");
         search_date_layout.setVisibility(View.GONE);
         search_button_layout.setVisibility(View.GONE);
+
     }
+
+    // -------
+    // ACTIONS
+    // -------
 
     @OnClick(R.id.activity_search_search_button)
     public void setSearch() {
@@ -197,8 +204,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
                     && !travel_chb.isChecked()){
                 Toast.makeText(this, "Please select at least one category", Toast.LENGTH_SHORT).show();
                 notification_switch.setChecked(false);
-            }
-            else {
+            } else {
                 configureSection();
                 saveNotificationParameters();
                 Log.i("UI","Switch checked");
@@ -272,44 +278,6 @@ public class SearchNotificationActivity extends AppCompatActivity{
                 });
     }
 
-    // ---------------------------------------------
-    // DATE PICKER DIALOG CONFIGURATION
-    // ---------------------------------------------
-
-    private void setBeginDate() {
-
-        mDatePickerDialogbegin = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                newDate.set(year, monthOfYear, dayOfMonth);
-                SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
-                final Date startDate = newDate.getTime();
-                String fdate = sd.format(startDate);
-
-                search_begin_date_edt.setText(fdate);
-
-            }
-        }, newDate.get(Calendar.YEAR), newDate.get(Calendar.MONTH), newDate.get(Calendar.DAY_OF_MONTH));
-        mDatePickerDialogbegin.getDatePicker().setMaxDate(System.currentTimeMillis());
-    }
-
-    private void setEndDate() {
-
-        mDatePickerDialogend = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                newDate.set(year, monthOfYear, dayOfMonth);
-                SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy",Locale.FRANCE);
-                final Date startDate = newDate.getTime();
-                String fdate = sd.format(startDate);
-                search_end_date_edt.setText(fdate);
-
-            }
-        }, newDate.get(Calendar.YEAR), newDate.get(Calendar.MONTH), newDate.get(Calendar.DAY_OF_MONTH));
-        mDatePickerDialogend.getDatePicker().setMaxDate(System.currentTimeMillis());
-
-    }
-
     // METHOD TO CHECK BEGINDATE IS AFTER ENDDATE
 
     private boolean checkBeginDateBeforeEndDate(){
@@ -326,7 +294,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
     // API CALL AND SHOW RECYCLERVIEW IF RESULTS OR POPUP IF NOT
     // ---------------------------------------------------------
 
-    private void configureAndShowArticleHTTP(){
+    public void configureAndShowArticleHTTP(){
         disposable = APIStreams.getSearchDocs("\""+search_query+"\""+" AND section_name.contains:("+search_section+")",begin_date,end_date).subscribeWith(new DisposableObserver<GeneralInfo>() {
             @Override
             public void onNext(GeneralInfo generalInfo) {
@@ -471,6 +439,10 @@ public class SearchNotificationActivity extends AppCompatActivity{
         }
     }
 
+    // ----------------------------------
+    // DATA FROM EDIT TEXT AND CHECKBOXES
+    // ----------------------------------
+
     private void getSearchParameters(){
         if (search_begin_date_edt.getText().length()==0){
             begin_date = null;
@@ -501,7 +473,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
         int sports_chb_st = SharedPreferencesUtility.getInt(getApplicationContext(),"SPORTS_CHB",-1);
         int travel_chb_st = SharedPreferencesUtility.getInt(getApplicationContext(),"TRAVEL_CHB",-1);
         int switch_st = SharedPreferencesUtility.getInt(getApplicationContext(),"NOTIFICATION_SWITCH",-1);
-        String notification_query =SharedPreferencesUtility.getString(getApplicationContext(),"NOTIFICATION_QUERY");
+        notification_query =SharedPreferencesUtility.getString(getApplicationContext(),"NOTIFICATION_QUERY");
 
         if (arts_chb_st == 1){
             arts_chb.setChecked(true);
@@ -538,7 +510,6 @@ public class SearchNotificationActivity extends AppCompatActivity{
         } else if (switch_st == 0 || switch_st == -1){
             notification_switch.setChecked(false);
         }
-
         search_query_edt.setText(notification_query);
     }
 
@@ -575,6 +546,44 @@ public class SearchNotificationActivity extends AppCompatActivity{
         SharedPreferencesUtility.putString(this,"NOTIFICATION_SECTION",notification_section);
     }
 
+    // --------------------------------
+    // DATE PICKER DIALOG CONFIGURATION
+    // --------------------------------
+
+    private void setBeginDate() {
+
+        mDatePickerDialogbegin = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                newDate.set(year, monthOfYear, dayOfMonth);
+                SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+                final Date startDate = newDate.getTime();
+                String fdate = sd.format(startDate);
+
+                search_begin_date_edt.setText(fdate);
+
+            }
+        }, newDate.get(Calendar.YEAR), newDate.get(Calendar.MONTH), newDate.get(Calendar.DAY_OF_MONTH));
+        mDatePickerDialogbegin.getDatePicker().setMaxDate(System.currentTimeMillis());
+    }
+
+    private void setEndDate() {
+
+        mDatePickerDialogend = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                newDate.set(year, monthOfYear, dayOfMonth);
+                SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy",Locale.FRANCE);
+                final Date startDate = newDate.getTime();
+                String fdate = sd.format(startDate);
+                search_end_date_edt.setText(fdate);
+
+            }
+        }, newDate.get(Calendar.YEAR), newDate.get(Calendar.MONTH), newDate.get(Calendar.DAY_OF_MONTH));
+        mDatePickerDialogend.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+    }
+
     // ----------------------------------
     // ALARM MANAGER TO SET NOTIFICATIONS
     // ----------------------------------
@@ -586,8 +595,8 @@ public class SearchNotificationActivity extends AppCompatActivity{
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar calendar_notification = Calendar.getInstance();
-        calendar_notification.set(Calendar.HOUR_OF_DAY, 8);
-        calendar_notification.set(Calendar.MINUTE, 10);
+        calendar_notification.set(Calendar.HOUR_OF_DAY, 10);
+        calendar_notification.set(Calendar.MINUTE, 0);
         calendar_notification.set(Calendar.SECOND, 0);
 
         if (calendar_notification.getTimeInMillis() < System.currentTimeMillis()) {
