@@ -111,7 +111,6 @@ public class SearchNotificationActivity extends AppCompatActivity{
                 setNotificationActivityLayout();
                 getNotificationParameters();
                 search_query_edt.setSelection(search_query_edt.getText().length());
-                Log.i("TEST",search_query_edt.length()+"");
                 break;
             default:
                 break;
@@ -132,6 +131,36 @@ public class SearchNotificationActivity extends AppCompatActivity{
                 return false;
             }
         });
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        System.out.println("MainActivity:onStart()"+search_query_edt.length());
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        System.out.println("MainActivity:onResume()"+search_query_edt.length());
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        System.out.println("MainActivity:onPause()");
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        System.out.println("MainActivity:onStop()");
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        System.out.println("MainActivity:onDestroy()");
     }
 
     // -------------
@@ -194,23 +223,27 @@ public class SearchNotificationActivity extends AppCompatActivity{
     }
 
     @OnCheckedChanged(R.id.activity_notification_switch)
-    public void switchChanged(CompoundButton button,boolean checked){
-        if (checked){
-            if (!arts_chb.isChecked()
-                    && !business_chb.isChecked()
-                    && !entrepreneurs_chb.isChecked()
-                    && !politics_chb.isChecked()
-                    && !sports_chb.isChecked()
-                    && !travel_chb.isChecked()){
-                Toast.makeText(this, "Please select at least one category", Toast.LENGTH_SHORT).show();
-                notification_switch.setChecked(false);
-            } else {
-                configureSection();
-                saveNotificationParameters();
-                Log.i("UI","Switch checked");
-                scheduleDailyNotification();
-                Toast.makeText(SearchNotificationActivity.this, "Notification scheduled", Toast.LENGTH_LONG).show();
-            }
+            public void switchChanged(CompoundButton button,boolean checked){
+                if (checked){
+                    if (!arts_chb.isChecked()
+                            && !business_chb.isChecked()
+                            && !entrepreneurs_chb.isChecked()
+                            && !politics_chb.isChecked()
+                            && !sports_chb.isChecked()
+                            && !travel_chb.isChecked()){
+                        Toast.makeText(this, "Please select at least one category", Toast.LENGTH_SHORT).show();
+                        notification_switch.setChecked(false);
+                    } else if (search_query_edt.length() == 0){
+                        Toast.makeText(this, "Please search for one term", Toast.LENGTH_SHORT).show();
+                        notification_switch.setChecked(false);
+                    }
+                    else {
+                        configureSection();
+                        saveNotificationParameters();
+                        Log.i("UI","Switch checked");
+                        scheduleDailyNotification();
+                        Toast.makeText(SearchNotificationActivity.this, "Notification scheduled", Toast.LENGTH_LONG).show();
+                    }
         } else if (!checked){
             Log.i("UI","Switch unchecked");
             cancelDailyNotification();
@@ -379,7 +412,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
     private void noResultsPopup (){
         final AlertDialog.Builder no_results_popup = new AlertDialog.Builder(this);
         no_results_popup.setTitle("Informations");
-        no_results_popup.setMessage("No results were found. Please try other words");
+        no_results_popup.setMessage("No results were found. Please try other words, select different section or change the period.");
         no_results_popup.show();
     }
 
@@ -595,7 +628,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar calendar_notification = Calendar.getInstance();
-        calendar_notification.set(Calendar.HOUR_OF_DAY, 10);
+        calendar_notification.set(Calendar.HOUR_OF_DAY, 7);
         calendar_notification.set(Calendar.MINUTE, 0);
         calendar_notification.set(Calendar.SECOND, 0);
 
