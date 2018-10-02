@@ -225,16 +225,17 @@ public class SearchNotificationActivity extends AppCompatActivity{
     @OnCheckedChanged(R.id.activity_notification_switch)
             public void switchChanged(CompoundButton button,boolean checked){
                 if (checked){
-                    if (!arts_chb.isChecked()
+                    if (search_query_edt.length() == 0){
+                        Toast.makeText(this, "Please search for one term", Toast.LENGTH_SHORT).show();
+                        notification_switch.setChecked(false);
+                    }
+                    else if (!arts_chb.isChecked()
                             && !business_chb.isChecked()
                             && !entrepreneurs_chb.isChecked()
                             && !politics_chb.isChecked()
                             && !sports_chb.isChecked()
                             && !travel_chb.isChecked()){
                         Toast.makeText(this, "Please select at least one category", Toast.LENGTH_SHORT).show();
-                        notification_switch.setChecked(false);
-                    } else if (search_query_edt.length() == 0){
-                        Toast.makeText(this, "Please search for one term", Toast.LENGTH_SHORT).show();
                         notification_switch.setChecked(false);
                     }
                     else {
@@ -508,6 +509,7 @@ public class SearchNotificationActivity extends AppCompatActivity{
         int switch_st = SharedPreferencesUtility.getInt(getApplicationContext(),"NOTIFICATION_SWITCH",-1);
         notification_query =SharedPreferencesUtility.getString(getApplicationContext(),"NOTIFICATION_QUERY");
 
+        search_query_edt.setText(notification_query);
         if (arts_chb_st == 1){
             arts_chb.setChecked(true);
         } else if (arts_chb_st == 0 || arts_chb_st == -1){
@@ -543,7 +545,6 @@ public class SearchNotificationActivity extends AppCompatActivity{
         } else if (switch_st == 0 || switch_st == -1){
             notification_switch.setChecked(false);
         }
-        search_query_edt.setText(notification_query);
     }
 
     private void saveNotificationParameters(){
