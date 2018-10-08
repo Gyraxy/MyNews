@@ -136,13 +136,11 @@ public class SearchNotificationActivity extends AppCompatActivity{
     @Override
     protected void onStart(){
         super.onStart();
-        System.out.println("MainActivity:onStart()"+search_query_edt.length());
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        System.out.println("MainActivity:onResume()"+search_query_edt.length());
     }
 
     @Override
